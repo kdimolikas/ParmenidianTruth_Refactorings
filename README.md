@@ -1,3 +1,5 @@
+## Parmenidian Truth Refactorings
+
 Parmenidian Truth<sup>1</sup> is a tool that takes as input a set of versions of a database schema and produces a pptx file with the visualization of the evolution of the database, one slide per version. 
 
 The original version was created by M. Kolozof in the context of his Diploma Thesis under the supervision of P. Vassiliadis, in June 2013. This is a refactored version of the tool implemented by K. Dimolikas, M. Zerva and I. Kouvatis in partial fulfillment of the requirements of the graduate course "Software & Data Evolution", in June 2017. In this version of the Parmenidian Truth project, we introduce a series of modifications that remedy the following design defects:
