@@ -5,6 +5,13 @@ import java.util.Map;
 import edu.uci.ics.jung.graph.Graph;
 
 
+/**
+ * Providing various graph-based metrics for Diachronic Graph of DB schema. 
+ * @author KD
+ * @since 2018-02-19
+ *
+ */
+
 public interface IGraphMetrics {
 	
 	Graph<String, String> getGraph();

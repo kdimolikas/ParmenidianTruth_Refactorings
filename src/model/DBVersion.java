@@ -84,6 +84,7 @@ public class DBVersion  {
 		return this.versionName;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Graph getGraph(){
 		
 		return graphMetricsOfDBVersion.getGraph();

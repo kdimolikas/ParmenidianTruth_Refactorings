@@ -10,17 +10,17 @@ public class ReportFactory {
 	private static EnumSet<Metric_Enums> graphMetricsSet = EnumSet.complementOf(vertexMetricsSet);
 	
 	
-	//getMetricsReportEngine determines the implementation of populateArray of MetricsReportEngine object
+	//Determines the implementation of populateArray of MetricsReportEngine object
 	public IMetricsReport getMetricsReportEngine(String targetFolder, Metric_Enums metric,IDiachronicGraph diachronicGraph){
 		
 		
 			if (graphMetricsSet.contains(metric)){
 			
-				return new GraphMetricsPopulation(targetFolder, metric,diachronicGraph);
+				return new GraphMetricsReport(targetFolder, metric,diachronicGraph);
 					
 			}else if (vertexMetricsSet.contains(metric)){
 			
-				return new VertexMetricsPopulation(targetFolder, metric,diachronicGraph);			
+				return new VertexMetricsReport(targetFolder, metric,diachronicGraph);			
 			
 			}else{
 				

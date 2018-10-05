@@ -18,7 +18,9 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
+@SuppressWarnings("rawtypes")
 public class GraphMetrics extends BicomponentClusterer implements IGraphMetrics{
+	
 	private Graph<String, String> graph;
 
 	
@@ -53,6 +55,7 @@ public class GraphMetrics extends BicomponentClusterer implements IGraphMetrics{
 
 	}
 	
+	@SuppressWarnings("unchecked")
 	public String generateVertexDegree(String vertex){
 		
 		
@@ -66,6 +69,7 @@ public class GraphMetrics extends BicomponentClusterer implements IGraphMetrics{
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public String generateVertexBetweenness(String vertex){
 		
 		vertex=vertex.replace(",","").trim();
@@ -79,6 +83,7 @@ public class GraphMetrics extends BicomponentClusterer implements IGraphMetrics{
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	public String generateEdgeBetweenness(String edge){
 		
 		
@@ -118,6 +123,7 @@ public class GraphMetrics extends BicomponentClusterer implements IGraphMetrics{
 		WeakComponentClusterer<String, String> wcc = new WeakComponentClusterer<String, String>();
 		Collection<Graph<String,String>> ccs = FilterUtils.createAllInducedSubgraphs(wcc.transform(graph),graph);
 		
+		@SuppressWarnings("unused")
 		DistanceStatistics ds = new DistanceStatistics();
 
 		
@@ -150,6 +156,7 @@ public class GraphMetrics extends BicomponentClusterer implements IGraphMetrics{
 		WeakComponentClusterer<String, String> wcc = new WeakComponentClusterer<String, String>();
 		Collection<Graph<String,String>> ccs = FilterUtils.createAllInducedSubgraphs(wcc.transform(graph),graph);
 		
+		@SuppressWarnings("unused")
 		DistanceStatistics ds = new DistanceStatistics();
 
 		
@@ -168,6 +175,7 @@ public class GraphMetrics extends BicomponentClusterer implements IGraphMetrics{
 		return giantConnectedComponent.getEdgeCount()+",";
 	}
 	
+	@SuppressWarnings({ "static-access", "unchecked" })
 	public String getGraphDiameter(){
 		
 		
@@ -223,6 +231,7 @@ public class GraphMetrics extends BicomponentClusterer implements IGraphMetrics{
 	
 	public Map<String,Double> getClusteringCoefficient(){
 		
+		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics();
 		
 		Map<String, Double> collection =Metrics.clusteringCoefficients(graph);

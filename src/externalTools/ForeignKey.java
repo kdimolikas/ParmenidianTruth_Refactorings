@@ -1,11 +1,13 @@
 package externalTools;
 
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ForeignKey {
+	
 	private Map<Attribute, Attribute> references;
 
 	public ForeignKey() {
@@ -64,10 +66,7 @@ public class ForeignKey {
 		}
 		
 		return foreingKeysOfVersion;
-		
-		
-
-		
+			
 		
 	}
 }

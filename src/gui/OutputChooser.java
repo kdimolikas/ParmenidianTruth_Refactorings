@@ -13,6 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import java.awt.Toolkit;
 
+@SuppressWarnings("serial")
 public class OutputChooser extends JDialog {
 	
 	private boolean pptxWanted=true;

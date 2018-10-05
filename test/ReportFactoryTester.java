@@ -6,10 +6,19 @@ import org.junit.Before;
 import org.junit.Test;
 import model.ReportFactory;
 import parmenidianEnumerations.Metric_Enums;
-import model.VertexMetricsPopulation;
-import model.GraphMetricsPopulation;
+import model.VertexMetricsReport;
+
 import model.DiachronicGraph;
 import model.MetricsReportEngine;
+
+
+/**
+ * Testing {@link model.ReportFactory} behavior when the instance of {@link model.DiachronicGraph} is null.
+ * @author MZ-IK
+ * @version 1.0
+ * @since 2017-05-23
+ *
+ */
 
 public class ReportFactoryTester {
 	
@@ -28,9 +37,8 @@ public class ReportFactoryTester {
 	public void testGetMetricsReportEngine() {
 		
 					
-		assertThat(expectedResult.getClass(), CoreMatchers.instanceOf(VertexMetricsPopulation.class));		
+		assertThat(expectedResult.getClass(), CoreMatchers.instanceOf(VertexMetricsReport.class));		
 	
 	}
-
 
 }

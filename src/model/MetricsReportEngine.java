@@ -5,6 +5,15 @@ import parmenidianEnumerations.Metric_Enums;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+
+/**
+ * Creates reports (in .csv format) containing graph-related metrics.
+ * @author KD
+ * @since 2017-05-23
+ * @version 1.0
+ *
+ */
+
 public abstract class MetricsReportEngine implements IMetricsReport{
 		
 	protected String targetFolder;
@@ -19,7 +28,7 @@ public abstract class MetricsReportEngine implements IMetricsReport{
 	protected String[][] report; 
 	private PrintWriter writer;
 	
-	//Template method: standardizes steps to create metrics reports
+	//Template method: determines steps to create metrics reports
 	public void generateMetricsReport(){
 		
 				
@@ -34,7 +43,7 @@ public abstract class MetricsReportEngine implements IMetricsReport{
 	
 	
 	//defined here
-	public void createCsvFile(){
+	private void createCsvFile(){
 		
 		try{
 			
@@ -50,11 +59,11 @@ public abstract class MetricsReportEngine implements IMetricsReport{
 	}
 	
 	
-	//defined in subclasses ArrayPopulationForGraphMetrics and ArrayPopulationForVertexMetrics
-	public abstract void populateArray();
+	//defined in subclasses of this class 
+	protected abstract void populateArray();
 			
 	//defined here
-	public void printArrayIntoFile(){
+	private void printArrayIntoFile(){
 		
 		try{
 			
@@ -75,8 +84,6 @@ public abstract class MetricsReportEngine implements IMetricsReport{
 		writer.close();
 	}
 	
-	public String[][] getReport(){
-		return report;
-	}
+	public String[][] getReport(){return report;}
 
 }

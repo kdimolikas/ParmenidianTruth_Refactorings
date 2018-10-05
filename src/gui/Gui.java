@@ -80,12 +80,14 @@ public class Gui extends JFrame {
 	private JPopupMenu pop = new JPopupMenu();
 	private ParmenidianTruthManagerFactory factory = new ParmenidianTruthManagerFactory();
 	private IParmenidianTruth manager;
+	
 	private Component visualizationViewer;
 	
 	
 	public Gui() {
 		
 		manager=factory.getManager();
+	
 		
 		getContentPane().setBackground(new Color(214,217,223));
 		this.workspace= preferences.get("workspace",null);
@@ -151,6 +153,7 @@ public class Gui extends JFrame {
 		mvNode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
 				manager.setPickingMode();
+				
 				radio1.setSelected(true);
 			}
 		});
@@ -164,6 +167,7 @@ public class Gui extends JFrame {
 		mvGraph.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				manager.setTransformingMode();
+				
 				radio2.setSelected(true);
 				
 			}
@@ -224,6 +228,7 @@ public class Gui extends JFrame {
 				
 				try {
 					manager.saveVertexCoordinates(projectIni);
+					
 					JOptionPane.showMessageDialog(Gui.this,"Layout changes have been saved");
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -333,7 +338,7 @@ public class Gui extends JFrame {
 		        	
 		        	getContentPane().remove(1);
 		        	getContentPane().add(manager.refresh((double)forceMultiplierSpinner.getValue(),(int)repulsionRangeSpinner.getValue()));
-					getContentPane().invalidate();
+		        	getContentPane().invalidate();
 					getContentPane().repaint();
 		            
 		        }
@@ -514,6 +519,7 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {	
 				try {
 					manager.saveVertexCoordinates(projectIni);
+					
 					JOptionPane.showMessageDialog(Gui.this,"Layout changes have been saved");
 
 				} catch (IOException e) {
@@ -614,6 +620,7 @@ public class Gui extends JFrame {
 		 if(fileOpen.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){
 			 try {
 				 manager.createTransitions(fileOpen.getSelectedFile());
+				
 				
 				JOptionPane.showMessageDialog(this,"Transition file was created successfully");
 			} catch (Exception e) {
@@ -751,6 +758,7 @@ public class Gui extends JFrame {
 
 		manager.stopConvergence();
 		
+		
 		visualizationViewer.requestFocus();	
 	}
 	
@@ -761,11 +769,13 @@ public class Gui extends JFrame {
 			return;
 		}
 		boolean [] array = new boolean[2];		
+		@SuppressWarnings("unused")
 		OutputChooser a = new OutputChooser(this,array);		
 			if(array[0]){
 				visualize(false);
 
 				loadImagesForPptx(manager.getTargetFolder());
+			
 				File pptx = createPowerPointPresentation();
 				
 				if(array[1])
@@ -779,9 +789,11 @@ public class Gui extends JFrame {
 			JOptionPane.showMessageDialog(Gui.this, "There is no project loaded");
 			return;
 		}
+		@SuppressWarnings("unused")
 		MetricsChooser m = new MetricsChooser(this);		
 	}
 	
+	@SuppressWarnings("unchecked")
 	private  void visualize(boolean atomically) {
 		
 		try {
@@ -797,6 +809,7 @@ public class Gui extends JFrame {
 	
 	private void createNewProject() {
 		
+		@SuppressWarnings("unused")
 		ProjectEditor pe = new ProjectEditor(Gui.this,Gui.this.workspace,false,null,null,null,null,null,null);
 	}
 	
@@ -828,6 +841,7 @@ public class Gui extends JFrame {
 		}
 		reader.close();
 		
+		@SuppressWarnings("unused")
 		ProjectEditor pe = new ProjectEditor(Gui.this,Gui.this.workspace,true,projectName,sql,xml,graphml,targetFolder,projectIni);
 	}
 
@@ -838,7 +852,9 @@ public class Gui extends JFrame {
 
 		fileNames.clear();
 		manager.clear();
+		
 		targetFolder=null;
+		@SuppressWarnings("unused")
 		EdgeChooser edgeChooser=null;
 		projectName=null;
 		projectIni=null;
@@ -903,6 +919,7 @@ public class Gui extends JFrame {
 		
 	}
 	
+	@SuppressWarnings("unused")
 	private static String retrieveSelectedWorkspace() throws FileNotFoundException{
 		
 		return preferences.get("workspace",null);
@@ -927,20 +944,22 @@ public class Gui extends JFrame {
 	public IParmenidianTruth getManager() {
 		return manager;
 	}
-
+	
+	
+	
 //modified by KD on 13/04/17
 	public void calculateMetrics(ArrayList<Metric_Enums> metrics) {
 		
 		if (!metrics.isEmpty()){
 			try{
-			
+
 				manager.generateMetricsReport(targetFolder, metrics);
 				JOptionPane.showMessageDialog(Gui.this,"Metrics were created successfully");
-			
+
 			}catch(Exception e){
-			
+
 				System.out.println(e.getClass());
-			
+
 			}
 		}else{
 			JOptionPane.showMessageDialog(Gui.this,"Metrics list is empty");

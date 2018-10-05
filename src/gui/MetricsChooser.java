@@ -14,6 +14,7 @@ import javax.swing.JSeparator;
 
 import parmenidianEnumerations.Metric_Enums;
 
+@SuppressWarnings("serial")
 public class MetricsChooser extends JDialog {
 	private JCheckBox numberOfConnectedComponents;
 	private JCheckBox numberOfEdges;

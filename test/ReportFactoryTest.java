@@ -12,7 +12,16 @@ import model.MetricsReportEngine;
 import model.ReportFactory;
 import parmenidianEnumerations.Metric_Enums;
 
+/**
+ * Testing {@link model.ReportFactory} class.
+ * @author MZ-IK
+ * @since 2017-05-23
+ * @version 1.0
+ *
+ */
+
 public class ReportFactoryTest {
+	
 	private static DiachronicGraph diag;
 	private static ReportFactory rf;
 	private static Metric_Enums metric;

@@ -1,15 +1,15 @@
 package model;
 
+/**
+ * 
+ * Responsible for generating graph metrics reports.
+ * @author KD
+ * @since 2018-02-16
+ *
+ */
+
 public interface IMetricsReport {
 	
 	public void generateMetricsReport();
-	
-	public void createCsvFile();
-	
-	public abstract void populateArray();
-	
-	public void printArrayIntoFile();
-	
-	public String[][] getReport();
 	
 }

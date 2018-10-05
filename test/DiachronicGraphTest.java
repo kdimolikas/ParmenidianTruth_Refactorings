@@ -6,14 +6,33 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import dataImport.GraphmlLoaderFactory;
+import dataImport.IGraphmlLoader;
 import model.DiachronicGraph;
 
+
+/**
+ * 
+ * Testing {@link model.DiachronicGraph} class using "Atlas" as dataset.
+ * @author MZ - IK
+ * @version {2.0 - modified by KD}
+ * @since 2018-03-04
+ *
+ */
+
 public class DiachronicGraphTest {
-	private static DiachronicGraph dg; 
+	
+	private static DiachronicGraph dg;
+	private static IGraphmlLoader gmlLoader;
+	private static GraphmlLoaderFactory gmlFactory;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		dg = new DiachronicGraph("C:\\Users\\mzerva\\Documents\\PV_Master\\EvolutionDatasets-master\\CERN\\Atlas\\processed schemata" , "C:\\Users\\mzerva\\Documents\\PV_Master\\EvolutionDatasets-master\\CERN\\Atlas\\results\\transitions.xml" , null , "C:\\Users\\mzerva\\Desktop\\Parmenidis_Output" , 0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0);
+		
+		dg = new DiachronicGraph();
+		gmlFactory = new GraphmlLoaderFactory();
+		gmlLoader = gmlFactory.createGraphmlLoader("C:\\Atlas_test\\output\\layout.graphml");
+		dg.loadDiachronicGraph(gmlLoader.getNodes(), gmlLoader.getEdges(), "C:\\Users\\PANOS\\Documents\\EvolutionDatasets\\CERN\\Atlas\\processed schemata", "C:\\Atlas_test\\output", 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	}
 
 	@AfterClass
@@ -46,11 +65,6 @@ public class DiachronicGraphTest {
 	@Test
 	public void testGetDictionaryOfGraph() {
 		assertNotNull("dictionary of graph not null", dg.getDictionaryOfGraph());
-	}
-
-	@Test
-	public void testGetVersion() {
-		assertNotNull("version not null", dg.getVersion());
 	}
 
 	@Test

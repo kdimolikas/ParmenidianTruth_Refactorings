@@ -26,10 +26,13 @@ import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 public class DBVersionVisualRepresentation {
 	public Layout<String, String> layout;
 	public String targetFolder;
+	@SuppressWarnings("rawtypes")
 	public Transformer edgeType;
 	private ArrayList<Table> nodes = new ArrayList<Table>();
+	@SuppressWarnings("unused")
 	private ArrayList<ForeignKey> edges= new ArrayList<ForeignKey>();
 	private String episodeName;
+	@SuppressWarnings("unused")
 	private int width,height;
 	private DBVersion parent;
 	private VisualizationViewer<String, String> visualizationViewer ;
@@ -56,6 +59,7 @@ public class DBVersionVisualRepresentation {
 
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void createEpisodes(VisualizationViewer< String, String> avv,ConcurrentHashMap<String, Table> graph,Dimension universalFrame,Rectangle universalBounds,Point2D universalCenter,double frameX,double frameY,double scaleX,double scaleY) {
 
 		

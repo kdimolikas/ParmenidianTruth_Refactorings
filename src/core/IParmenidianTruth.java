@@ -9,8 +9,16 @@ import java.util.ArrayList;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import parmenidianEnumerations.Metric_Enums;
 
+/**
+ * Providing main functionalities of ParmenidianTruth project.
+ * @author KD
+ * @since 2018-02-19
+ *
+ */
+
 public interface IParmenidianTruth {
-	//modelManager
+	
+	//modelManager functionalities
 	public void clear();
 	
 	public String getTargetFolder();
@@ -31,9 +39,11 @@ public interface IParmenidianTruth {
 	
 	public void generateMetricsReport(String targetFolder, ArrayList<Metric_Enums> metrics);
 	
-	//exportManager
+	
 	public void createTransitions(File selectedFile) throws Exception;
-			
+	
+	
+	//exportManager	functionalities
 	public void createPowerPointPresentation(ArrayList<String> FileNames,String targetFolder,String projectName) throws FileNotFoundException, IOException;
 	
 	public void createVideo(File file) throws IOException;

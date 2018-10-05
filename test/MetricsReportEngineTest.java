@@ -4,34 +4,51 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import model.GraphMetricsPopulation;
-import model.VertexMetricsPopulation;
+import dataImport.GraphmlLoaderFactory;
+import dataImport.IGraphmlLoader;
+import model.GraphMetricsReport;
+import model.VertexMetricsReport;
 import model.DiachronicGraph;
-import model.ReportFactory;
+
 import parmenidianEnumerations.Metric_Enums;
 
+/**
+ * Testing {@link model.MetricsReportEngine} class using Atlas as dataset.
+ * @author MZ-IK
+ * @since 2018-03-04
+ * @version {2.0 - modified by KD}
+ *
+ */
+
 public class MetricsReportEngineTest {
-	private static GraphMetricsPopulation graphReport;
-	private static VertexMetricsPopulation vertexReport;
+	
+	private static GraphMetricsReport graphReport;
+	private static VertexMetricsReport vertexReport;
 	private static DiachronicGraph diag;
 	private static Metric_Enums metric;
-	private static GraphMetricsPopulation spyGraph;
-	private static VertexMetricsPopulation spyVertex;
+	private static GraphMetricsReport spyGraph;
+	private static VertexMetricsReport spyVertex;
+	private static IGraphmlLoader gmlLoader;
+	private static GraphmlLoaderFactory gmlFactory;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		//graphReport=Mockito.mock(ArrayPopulationForGraphMetrics.class);
-		//vertexReport=Mockito.mock(ArrayPopulationForVertexMetrics.class);
-		//diag = Mockito.mock(DiachronicGraph.class);
-		diag = new DiachronicGraph("C:\\Users\\mzerva\\Documents\\PV_Master\\EvolutionDatasets-master\\CERN\\Atlas\\processed schemata" , "C:\\Users\\mzerva\\Documents\\PV_Master\\EvolutionDatasets-master\\CERN\\Atlas\\results\\transitions.xml" , null , "C:\\Users\\mzerva\\Desktop\\Parmenidis_Output" , 0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0);
+
+		
+		diag = new DiachronicGraph();
+		gmlFactory = new GraphmlLoaderFactory();
+		gmlLoader = gmlFactory.createGraphmlLoader("C:\\Atlas_test\\output\\layout.graphml");
+		diag.loadDiachronicGraph(gmlLoader.getNodes(), gmlLoader.getEdges(), "C:\\Users\\PANOS\\Documents\\EvolutionDatasets\\CERN\\Atlas\\processed schemata", "C:\\Atlas_test\\output", 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		metric=Metric_Enums.CLUSTERING_COEFFICIENT;
-		graphReport = new GraphMetricsPopulation("C:\\Users\\mzerva\\Desktop\\Parmenidis_Output\\tests",metric, diag);
-		vertexReport = new VertexMetricsPopulation("C:\\Users\\mzerva\\Desktop\\Parmenidis_Output\\tests",metric, diag);
+		graphReport = new GraphMetricsReport("C:\\Atlas_test\\output\\tests",metric, diag);
+		vertexReport = new VertexMetricsReport("C:\\Atlas_test\\output\\tests",metric, diag);
 		spyGraph = Mockito.spy(graphReport);
 		spyVertex = Mockito.spy(vertexReport);
+		
 	}
 
 	@AfterClass
@@ -56,17 +73,17 @@ public class MetricsReportEngineTest {
 		assertNotNull("vertex report array filled", spyVertex.getReport());
 	}
 
-	@Test
+	@Ignore
 	public void testCreateCsvFile() {
 		//just opens a file
 	}
 
-	@Test
+	@Ignore
 	public void testPopulateArray() {
 		//abstract
 	}
 
-	@Test
+	@Ignore
 	public void testPrintArrayIntoFile() {
 		//just writes the array content to the file
 	}

@@ -13,6 +13,14 @@ import parmenidianEnumerations.Status;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 
+/**
+ * Holds data about schema evolution and manipulates diachronic graph.
+ * @author MK
+ * @version {2.0 - modified by KD}
+ * @since 2018-03-04
+ *
+ */
+
 @SuppressWarnings({ "rawtypes", "unused" })
 public class DiachronicGraph implements IDiachronicGraph{
 
@@ -29,36 +37,12 @@ public class DiachronicGraph implements IDiachronicGraph{
 	private IGraphMetrics graphMetricsOfDiachronicGraph;
 	private GraphMetricsFactory gmFactory= new GraphMetricsFactory();
 	
-	public DiachronicGraph(String sql,String xml,String graphml, String targetFolder, int et,double frameX,double frameY,double scaleX,double scaleY,double centerX,double centerY) throws Exception {
-		
-		Parser parser;
-		GraphmlLoader changesSaved;
-
-		parser = new Parser(sql,xml,graphml);
-		versions=parser.getLifetime();
-		transitions=parser.getTransitions();
-		updateLifetimeWithTransitions();
-		
-		int mode;
-		if(parser.hasGraphml()){
-			changesSaved=parser.getGraphmlLoader();
-			
-			vertices=changesSaved.getNodes();
-			edges=changesSaved.getEdges();
-			fixGraph();	
-			mode=1;
-			graphMetricsOfDiachronicGraph = gmFactory.getGraphMetrics(vertices,edges);
-			visualizationOfDiachronicGraph = new DiachronicGraphVisualRepresentation(this,vertices,edges,sql,targetFolder,et,mode,frameX,frameY,scaleX,scaleY,centerX,centerY);
-		}else{
-			
-			createDiachronicGraph();
-			mode=0;
-			graphMetricsOfDiachronicGraph = gmFactory.getGraphMetrics(vertices,edges);
-			visualizationOfDiachronicGraph = new DiachronicGraphVisualRepresentation(this,vertices,edges,sql,targetFolder,et,mode,frameX,frameY,scaleX,scaleY,centerX,centerY);
-		}		
-	}
 	
-	private void updateLifetimeWithTransitions(){
+	public DiachronicGraph() {}
+
+	//made public by KD on 2018-02-15
+	@Override
+	public void updateLifetimeWithTransitions(){
 		
 		for(int i=0;i<versions.size();++i)
 			if(i==0)
@@ -69,6 +53,48 @@ public class DiachronicGraph implements IDiachronicGraph{
 				setIntermediateVersion(versions.get(i),i);
 	}
 	
+	//added by KD on 2018-02-15
+	@Override
+	public void loadDiachronicGraph(ArrayList<Table> v, ArrayList<ForeignKey> e, String in, String tf, int et,double frameX,double frameY,double scaleX,double scaleY,double centerX,double centerY) {
+		
+		int mode;
+		
+		this.setVertices(v);
+		this.setEdges(e);
+		fixGraph();	
+		mode=1;
+		generateGraphMetrics();
+		createVisualizer(in, tf, et,mode,frameX,frameY,scaleX,scaleY,centerX,centerY);
+	}
+	
+	
+	//added by KD on 2018-02-15
+	@Override
+	public void createDiachronicGraph(String in, String tf, int et,double frameX,double frameY,double scaleX,double scaleY,double centerX,double centerY) {
+		
+		int mode;
+		
+		createDiachronicGraph();
+		mode=0;
+		generateGraphMetrics();
+		createVisualizer(in, tf, et,mode,frameX,frameY,scaleX,scaleY,centerX,centerY);
+	}
+
+	//added by KD on 2018-02-15
+	private void generateGraphMetrics() {
+		
+		graphMetricsOfDiachronicGraph = gmFactory.getGraphMetrics(vertices,edges);
+		
+	}
+	
+	//added by KD on 2018-02-15
+	private void createVisualizer(String in, String tf, int et,int mode,double frameX,double frameY,double scaleX,double scaleY,double centerX,double centerY) {
+		
+		visualizationOfDiachronicGraph = new DiachronicGraphVisualRepresentation(this,vertices,edges,in,tf,et,mode,frameX,frameY,scaleX,scaleY,centerX,centerY);
+		
+	}
+
+
 	/**
 	 * Trexw thn prwth version me to prwto Dictionary kai checkarw n dw an sthn
 	 * 2h version exei svistei kapoios pinakas.Me endiaferei mono to deletion
@@ -177,9 +203,7 @@ public class DiachronicGraph implements IDiachronicGraph{
 			  
 			  vertices.add(value);
 
-		}
-		
-		
+		}	
 		
 	}	
 
@@ -199,11 +223,6 @@ public class DiachronicGraph implements IDiachronicGraph{
 		return graph;
 	}
 
-	public String getVersion() {
-		
-		return "Universal Graph";
-		
-	}
 	
 	public void clear(){
 		
@@ -246,7 +265,7 @@ public class DiachronicGraph implements IDiachronicGraph{
 	
 	public void visualizeDiachronicGraph(VisualizationViewer< String, String> vizualizationViewer){
 		
-		visualizationOfDiachronicGraph.createEpisode(vizualizationViewer);
+		visualizationOfDiachronicGraph.visualizeDiachronicGraph(vizualizationViewer);
 		
 	}
 	
@@ -328,13 +347,45 @@ public class DiachronicGraph implements IDiachronicGraph{
 
 	}
 	
-//created by KD on 13/04/17	
-		public IGraphMetrics getGraphMetrics(){
-			
-			
-			return graphMetricsOfDiachronicGraph;
-			
 
-		}
+	
+//created by KD on 13/04/17	
+	public IGraphMetrics getGraphMetrics(){
+
+
+		return graphMetricsOfDiachronicGraph;
+
+
+	}
+	
+	
+	//created by KD on 2018-02-14
+	@Override
+	public void setVersions(ArrayList<DBVersion> vrs) {
+
+		this.versions = vrs;
+
+	}
+	
+	
+	//created by KD on 2018-02-14
+	@Override
+	public void setTransitions(ArrayList<Map<String,Integer>> trs) {
+
+		this.transitions = trs;
+
+	}
+	
+	
+	private void  setEdges(ArrayList<ForeignKey> e) {
+		
+		this.edges = e;
+	}
+
+
+	private void setVertices(ArrayList<Table> v) {
+	
+		this.vertices = v;
+	}
 
 }

@@ -66,6 +66,7 @@ public class WorkspaceChooser extends JFrame{
 				if(a.showOpenDialog(getContentPane())==JFileChooser.APPROVE_OPTION){
 					
 					String[] array ={a.getSelectedFile().getAbsolutePath()};
+					@SuppressWarnings({ "rawtypes", "unchecked" })
 					DefaultComboBoxModel model = new DefaultComboBoxModel(array);
 					textField.setText(model.getElementAt(0).toString());
 				}
@@ -118,6 +119,7 @@ public class WorkspaceChooser extends JFrame{
 		textField.setDragEnabled(true);
 		textField.selectAll();
 		
+		@SuppressWarnings("serial")
 		TransferHandler handler =   new TransferHandler() {
 
 	        @Override
@@ -135,16 +137,17 @@ public class WorkspaceChooser extends JFrame{
 					textField.setText(getRefinedText(t.getTransferData(DataFlavor.javaFileListFlavor).toString()));
 					textField.selectAll();
 				} catch (UnsupportedFlavorException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 	            return true;
 	        }
 
-	        private void displayDropLocation(String string) {
+	        @SuppressWarnings("unused")
+			private void displayDropLocation(String string) {
 	            System.out.println(string);
 	        }
 	    };

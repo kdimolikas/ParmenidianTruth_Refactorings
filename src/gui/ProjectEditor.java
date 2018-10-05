@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+@SuppressWarnings("serial")
 public class ProjectEditor extends JFrame {
 	
 	JFileChooser fileChooser = new JFileChooser();
@@ -207,10 +208,10 @@ public class ProjectEditor extends JFrame {
 							reader.close();
 							
 						} catch (FileNotFoundException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
 						
@@ -234,13 +235,13 @@ public class ProjectEditor extends JFrame {
 						writer.close();
 						
 					} catch (FileNotFoundException | UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
+				
 						e.printStackTrace();
 					}
 					try {
 						parent.loadLifetime(workspace+"\\"+textField_2.getText().trim()+".ini");
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 					dispose();	
@@ -268,7 +269,7 @@ public class ProjectEditor extends JFrame {
 					 if(fileChooser.showOpenDialog(ProjectEditor.this)==JFileChooser.APPROVE_OPTION){
 						 try {
 							 parent.getManager().createTransitions(fileChooser.getSelectedFile());
-							
+														
 							JOptionPane.showMessageDialog(ProjectEditor.this,"Transition file was created successfully");
 						} catch (Exception e) {
 							JOptionPane.showMessageDialog(ProjectEditor.this, "Invalid Data Entry","Error",JOptionPane.ERROR_MESSAGE);

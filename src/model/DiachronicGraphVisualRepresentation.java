@@ -37,19 +37,28 @@ import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 public class DiachronicGraphVisualRepresentation {
+
 	private ArrayList<Table> nodes = new ArrayList<Table>();
+	@SuppressWarnings("unused")
 	private ArrayList<ForeignKey> edges= new ArrayList<ForeignKey>();
+	@SuppressWarnings("unused")
 	private String inputFolder;
 	private SpringLayout2<String, String> layout;
 	private static DefaultModalGraphMouse<String, Number> graphMouse = new DefaultModalGraphMouse<String, Number>();
 	private  VisualizationViewer<String, String> visualizationViewer;
 	private Dimension universalFrame;
 	private String targetFolder;
+	private String outputFolder; //added on 2018/03/04
+	@SuppressWarnings("rawtypes")
 	private Transformer edgeType;
 	private  MutableTransformer universalTransformerForTranslation;
 	private  MutableTransformer universalTransformerForScaling;
 	private DiachronicGraph parent;
 
+	
+	public DiachronicGraphVisualRepresentation() {}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public DiachronicGraphVisualRepresentation(DiachronicGraph p,ArrayList<Table> tables,ArrayList<ForeignKey> fks,String in, String tf, int et,int mode,double frameX,double frameY,double scaleX,double scaleY,double centerX,double centerY) {		
 		
 		edgeType = et == 0 ? new EdgeShape.Line<String, String>(): new EdgeShape.Orthogonal<String, String>();
@@ -59,6 +68,7 @@ public class DiachronicGraphVisualRepresentation {
 		edges=fks;
 		inputFolder=in;
 		targetFolder = tf+"//screenshots";
+		outputFolder = tf;
 		new File(targetFolder ).mkdir();
 
 		layout= new SpringLayout2<String, String>(parent.getGraph());
@@ -70,6 +80,7 @@ public class DiachronicGraphVisualRepresentation {
 		visualizationViewer.setSize(new Dimension(universalFrame.width+300, universalFrame.height+300));
 
 		// Setup up a new vertex to paint transformer...
+		@SuppressWarnings("unused")
 		Transformer<String, Paint> vertexPaint = new Transformer<String, Paint>() {
 			public Paint transform(String i) {
 				return new Color(207, 247, 137, 200);
@@ -111,6 +122,7 @@ public class DiachronicGraphVisualRepresentation {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public VisualizationViewer show() {
 		
 		visualizationViewer.repaint();
@@ -132,6 +144,7 @@ public class DiachronicGraphVisualRepresentation {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void saveVertexCoordinates(String projectIni) throws IOException {
 		//save sthn mnhmh
 		for (int i = 0; i <nodes.size(); ++i)
@@ -139,11 +152,13 @@ public class DiachronicGraphVisualRepresentation {
 		
 		//save sto .graphml arxeio
 		GraphMLWriter<String,String> graphWriter = new GraphMLWriter<String, String> ();
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(inputFolder+"\\uber.graphml")));
+		//modified on 2018-03-04
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFolder+"\\layout.graphml")));
 
 		graphWriter.addVertexData("x", null, "0",
 			    new Transformer<String, String>() {
-			        public String transform(String v) {
+			        @SuppressWarnings({ "rawtypes" })
+					public String transform(String v) {
 			        	
 				            return Double.toString(((AbstractLayout)layout).getX(v));
 			        		
@@ -168,11 +183,13 @@ public class DiachronicGraphVisualRepresentation {
 		
 	}
 
-	public void createEpisode(VisualizationViewer< String, String> vv) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void visualizeDiachronicGraph(VisualizationViewer< String, String> vv) {
 
 		vv.setGraphLayout(layout);
 
 		
+		@SuppressWarnings("unused")
 		Transformer<String, Paint> vertexPaint = new Transformer<String, Paint>() {
 			public Paint transform(String i) {
 				return new Color(207, 247, 137, 200);
@@ -214,6 +231,7 @@ public class DiachronicGraphVisualRepresentation {
 		return targetFolder;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void stop(){
 		((SpringLayout2)layout).lock(true);
 	}
@@ -243,7 +261,7 @@ public class DiachronicGraphVisualRepresentation {
 				
 				writer = new PrintWriter(new FileWriter(projectIni));
 				writer.println(restOfFile);
-				writer.println("graphml@"+inputFolder+"\\uber.graphml");
+				writer.println("graphml@"+outputFolder+"\\layout.graphml");
 				writer.println("frameX@"+universalTransformerForTranslation.getTranslateX());
 				writer.println("frameY@"+universalTransformerForTranslation.getTranslateY());
 				writer.println("centerX@"+visualizationViewer.getCenter().getX());
