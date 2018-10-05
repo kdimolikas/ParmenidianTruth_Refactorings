@@ -105,9 +105,9 @@ public class ModelManager {
 		this.setVersions(sql);
 		this.setTransitions(xml);
 		diachronicGraph.updateLifetimeWithTransitions();
-		
+		parser = parserFactory.createHecateParser();//added on 2018-10-05 by KD
 		if (graphml != null) {
-			parser = parserFactory.createHecateParser();//added on 2018-10-05 by KD
+			
 			parser.createGraphmlLoader(graphml);
 			gl = parser.getGraphmlLoader();
 			diachronicGraph.loadDiachronicGraph(gl.getNodes(),gl.getEdges(), sql, targetFolder, edgeType, frameX, frameY, scaleX, scaleY, centerX, centerY);
