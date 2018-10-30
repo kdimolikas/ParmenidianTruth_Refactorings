@@ -20,7 +20,8 @@ import parmenidianEnumerations.Metric_Enums;
 
 
 /**
- * Operating as a manager that communicates with {@link model}
+ * Operating as a manager that communicates with {@link model.constructs}, {@link model.graphMetrics},
+ *  {@link model.metricsReport} packages.
  * @author MK
  * @version {2.0 - modified by KD-MZ-IK}
  * @modified by KD on 2018-10-30
