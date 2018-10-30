@@ -49,10 +49,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import parmenidianEnumerations.Metric_Enums;
+
 import core.IParmenidianTruth;
 import core.ParmenidianTruthManagerFactory;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import parmenidianEnumerations.Metric_Enums;
 
 
 public class Gui extends JFrame {
