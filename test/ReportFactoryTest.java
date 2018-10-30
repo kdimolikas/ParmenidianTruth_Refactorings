@@ -7,30 +7,37 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import model.DiachronicGraph;
-import model.MetricsReportEngine;
-import model.ReportFactory;
+import model.constructs.DiachronicGraph;
+import model.graphMetrics.GraphMetricsFactory;
+import model.graphMetrics.IGraphMetrics;
+import model.metricsReport.MetricsReportEngine;
+import model.metricsReport.ReportFactory;
 import parmenidianEnumerations.Metric_Enums;
 
 /**
- * Testing {@link model.ReportFactory} class.
+ * Testing {@link model.metricsReport.ReportFactory} class.
  * @author MZ-IK
- * @since 2017-05-23
- * @version 1.0
+ * @since 2017-05-23 (Upd. by KD on 2018-10-29)
+ * @version 2.0
  *
  */
 
 public class ReportFactoryTest {
 	
 	private static DiachronicGraph diag;
+	private static GraphMetricsFactory gFactory;
+	private static IGraphMetrics gMetrics;
 	private static ReportFactory rf;
 	private static Metric_Enums metric;
 	private static Metric_Enums metric1;
+	private static final String OUTPUT_FOLDER = "test/test_output";
 
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		diag = Mockito.mock(DiachronicGraph.class);
+		gFactory = new GraphMetricsFactory();
+		gMetrics = gFactory.getDiachronicGraphMetrics(diag.getNodes(), diag.getEdges());
 		metric=Metric_Enums.CLUSTERING_COEFFICIENT;
 		metric1=null;
 		rf= new ReportFactory();
@@ -50,9 +57,9 @@ public class ReportFactoryTest {
 
 	@Test
 	public void testGetMetricsReportEngine() {
-			MetricsReportEngine mReport=(MetricsReportEngine) rf.getMetricsReportEngine("C:\\Users\\mzerva\\Desktop\\Parmenidis_Output\\tests", metric, diag);
+			MetricsReportEngine mReport=(MetricsReportEngine) rf.getMetricsReportEngine(OUTPUT_FOLDER, metric, diag,gMetrics);
 			assertNotNull("MetricsReportEngine object not null", mReport);
-			MetricsReportEngine mReport1=(MetricsReportEngine) rf.getMetricsReportEngine("C:\\Users\\mzerva\\Desktop\\Parmenidis_Output\\tests", metric1, diag);
+			MetricsReportEngine mReport1=(MetricsReportEngine) rf.getMetricsReportEngine(OUTPUT_FOLDER, metric1, diag,gMetrics);
 			assertNull("MetricsReportEngine is null", mReport1);
 	}
 

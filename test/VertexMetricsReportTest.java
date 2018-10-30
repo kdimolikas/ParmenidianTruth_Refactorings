@@ -9,39 +9,62 @@ import org.junit.Test;
 
 import dataImport.GraphmlLoaderFactory;
 import dataImport.IGraphmlLoader;
-import model.VertexMetricsReport;
-import model.DiachronicGraph;
+import dataImport.IParser;
+import dataImport.ParserFactory;
+import model.constructs.DiachronicGraphFactory;
+import model.constructs.IDiachronicGraph;
+import model.graphMetrics.GraphMetricsFactory;
+import model.graphMetrics.IGraphMetrics;
+import model.metricsReport.ReportFactory;
+import model.metricsReport.VertexMetricsReport;
 import parmenidianEnumerations.Metric_Enums;
 
 
 /**
  * 
- * Testing {@link model.VertexMetricsReport} class using Atlas as dataset.
+ * Testing {@link model.metricsReport.VertexMetricsReport} class using "Egee" as dataset.
  * @author MZ-IK
- * @since 2017-05-23
- * @version {2.0 - modified by KD}
+ * @since 2017-05-23 (Upd. by KD on 2018-10-29)
+ * @version 2.0
  *
  */
 
 public class VertexMetricsReportTest {
 	
-	private static DiachronicGraph diag;
+	private static IDiachronicGraph diag;
+	private static DiachronicGraphFactory diagFactory;
 	private static Metric_Enums metric;
-	private static VertexMetricsReport vertexArray;
+	private static VertexMetricsReport vertexReport;
 	private static IGraphmlLoader gmlLoader;
 	private static GraphmlLoaderFactory gmlFactory;
+	private static IGraphMetrics DGMetrics;
+	private static GraphMetricsFactory gFactory;
+	private static ReportFactory repFactory;
+	
+	private static IParser parser;
+	private static ParserFactory pFactory;
+	
+	private static final String INPUT_FOLDER = "test/test_input";
+	private static final String OUTPUT_FOLDER = "test/test_output";
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		
 	
-		diag = new DiachronicGraph();
+		diagFactory = new DiachronicGraphFactory();
+		diag = diagFactory.createDiachronicGraph();
 		gmlFactory = new GraphmlLoaderFactory();
-		gmlLoader = gmlFactory.createGraphmlLoader("C:\\Atlas_test\\output\\layout.graphml");
-		diag.loadDiachronicGraph(gmlLoader.getNodes(), gmlLoader.getEdges(), "C:\\Users\\PANOS\\Documents\\EvolutionDatasets\\CERN\\Atlas\\processed schemata", "C:\\Atlas_test\\output", 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-		metric=Metric_Enums.CLUSTERING_COEFFICIENT;
-		vertexArray = new VertexMetricsReport("C:\\Atlas_test\\output\\tests",metric,diag);
+		gmlLoader = gmlFactory.createGraphmlLoader(INPUT_FOLDER.concat("/layout.graphml"));
+		diag.loadDiachronicGraph(gmlLoader.getNodes(), gmlLoader.getEdges());
 		
+		pFactory = new ParserFactory();
+		parser = pFactory.createHecateParser();
+		diag.setVersions(parser.getLifetime(INPUT_FOLDER.concat("/processed schemata")));
+		
+		gFactory = new GraphMetricsFactory();
+		DGMetrics = gFactory.getDiachronicGraphMetrics(diag.getNodes(), diag.getEdges());
+		metric=Metric_Enums.VERTEX_OUT_DEGREE;
+		repFactory = new ReportFactory();
+		vertexReport = (VertexMetricsReport) repFactory.getMetricsReportEngine(OUTPUT_FOLDER, metric, diag, DGMetrics); 
 		
 	}
 
@@ -68,14 +91,16 @@ public class VertexMetricsReportTest {
 
 	@Test
 	public void testGetDiachronicGraphMetricValue() {
-		String tablename="";
-		assertNotNull("DiachronicGraphMetricValue not null", vertexArray.getDiachronicGraphMetricValue(metric.name(),tablename));
+		String tablename="t_job";
+		assertNotNull("DiachronicGraphMetricValue not null", vertexReport.getDiachronicGraphMetricValue(metric.name(),tablename));
 	}
 
 	@Test
 	public void testGetVersionMetricValue() {
-		String tablename="";
-		assertNotNull("VersionMetricValue not null", vertexArray.getVersionMetricValue(metric.name(),1,tablename));
+
+		String tablename="t_job";
+		assertNotNull("VersionMetricValue not null", vertexReport.getVersionMetricValue(metric.name(),2,tablename));
+		
 	}
 
 }

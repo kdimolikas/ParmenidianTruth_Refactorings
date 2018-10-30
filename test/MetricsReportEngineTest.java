@@ -10,17 +10,18 @@ import org.mockito.Mockito;
 
 import dataImport.GraphmlLoaderFactory;
 import dataImport.IGraphmlLoader;
-import model.GraphMetricsReport;
-import model.VertexMetricsReport;
-import model.DiachronicGraph;
-
+import model.constructs.DiachronicGraph;
+import model.graphMetrics.GraphMetricsFactory;
+import model.graphMetrics.IGraphMetrics;
+import model.metricsReport.GraphMetricsReport;
+import model.metricsReport.VertexMetricsReport;
 import parmenidianEnumerations.Metric_Enums;
 
 /**
- * Testing {@link model.MetricsReportEngine} class using Atlas as dataset.
+ * Testing {@link model.metricsReport.MetricsReportEngine} class using "Egee" as dataset.
  * @author MZ-IK
- * @since 2018-03-04
- * @version {2.0 - modified by KD}
+ * @since 2018-03-04 (Upd. by KD on 2018-10-29)
+ * @version 2.0
  *
  */
 
@@ -29,11 +30,16 @@ public class MetricsReportEngineTest {
 	private static GraphMetricsReport graphReport;
 	private static VertexMetricsReport vertexReport;
 	private static DiachronicGraph diag;
-	private static Metric_Enums metric;
+	private static Metric_Enums vertexMetric;
+	private static Metric_Enums graphMetric;
 	private static GraphMetricsReport spyGraph;
 	private static VertexMetricsReport spyVertex;
 	private static IGraphmlLoader gmlLoader;
 	private static GraphmlLoaderFactory gmlFactory;
+	private static IGraphMetrics gMetrics;
+	private static GraphMetricsFactory gFactory;
+	private static final String INPUT_FOLDER = "test/test_input";
+	private static final String OUTPUT_FOLDER = "test/test_output";
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -41,11 +47,14 @@ public class MetricsReportEngineTest {
 		
 		diag = new DiachronicGraph();
 		gmlFactory = new GraphmlLoaderFactory();
-		gmlLoader = gmlFactory.createGraphmlLoader("C:\\Atlas_test\\output\\layout.graphml");
-		diag.loadDiachronicGraph(gmlLoader.getNodes(), gmlLoader.getEdges(), "C:\\Users\\PANOS\\Documents\\EvolutionDatasets\\CERN\\Atlas\\processed schemata", "C:\\Atlas_test\\output", 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-		metric=Metric_Enums.CLUSTERING_COEFFICIENT;
-		graphReport = new GraphMetricsReport("C:\\Atlas_test\\output\\tests",metric, diag);
-		vertexReport = new VertexMetricsReport("C:\\Atlas_test\\output\\tests",metric, diag);
+		gmlLoader = gmlFactory.createGraphmlLoader(INPUT_FOLDER.concat("/layout.graphml"));
+		diag.loadDiachronicGraph(gmlLoader.getNodes(), gmlLoader.getEdges()); 
+		gFactory = new GraphMetricsFactory();
+		gMetrics = gFactory.getDiachronicGraphMetrics(diag.getNodes(), diag.getEdges());
+		vertexMetric=Metric_Enums.CLUSTERING_COEFFICIENT;
+		graphMetric=Metric_Enums.NUMBER_OF_VERTICES;
+		graphReport = new GraphMetricsReport(OUTPUT_FOLDER,graphMetric, diag, gMetrics);
+		vertexReport = new VertexMetricsReport(OUTPUT_FOLDER,vertexMetric, diag, gMetrics);
 		spyGraph = Mockito.spy(graphReport);
 		spyVertex = Mockito.spy(vertexReport);
 		

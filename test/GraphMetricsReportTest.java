@@ -11,15 +11,18 @@ import dataImport.GraphmlLoaderFactory;
 import dataImport.IGraphmlLoader;
 import dataImport.IParser;
 import dataImport.ParserFactory;
-import model.GraphMetricsReport;
-import model.DiachronicGraph;
+import model.constructs.DiachronicGraph;
+import model.graphMetrics.GraphMetricsFactory;
+import model.graphMetrics.IGraphMetrics;
+import model.metricsReport.GraphMetricsReport;
+import model.metricsReport.ReportFactory;
 import parmenidianEnumerations.Metric_Enums;
 
 /**
- * Testing {@link model.GraphMetricsReport} class using Atlas as dataset.
+ * Testing {@link model.metricsReport.GraphMetricsReport} class using "Egee" as dataset.
  * @author MZ-IK
- * @since 2018-03-04
- * @version {2.0 - modified by KD}
+ * @since 2018-03-04 (Upd. by KD on 2018-10-29)
+ * @version 2.0
  *
  */
 
@@ -27,24 +30,37 @@ public class GraphMetricsReportTest {
 	
 	private static DiachronicGraph diag;
 	private static Metric_Enums metric;
-	private static GraphMetricsReport graphArray;
+	private static GraphMetricsReport graphReport;
+	
 	private static IGraphmlLoader gmlLoader;
 	private static GraphmlLoaderFactory gmlFactory;
 	private static IParser parser;
 	private static ParserFactory pFactory;
+	
+	private static IGraphMetrics graphMetrics;//added on 2018-101-29
+	private static GraphMetricsFactory gFactory;
+	private static ReportFactory repFactory;
+	
+	private static final String INPUT_FOLDER = "test/test_input";
+	private static final String OUTPUT_FOLDER = "test/test_output";
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		
 		diag = new DiachronicGraph();
 		gmlFactory = new GraphmlLoaderFactory();
-		gmlLoader = gmlFactory.createGraphmlLoader("C:\\Atlas_test\\output\\layout.graphml");
-		diag.loadDiachronicGraph(gmlLoader.getNodes(), gmlLoader.getEdges(), "C:\\Users\\PANOS\\Documents\\EvolutionDatasets\\CERN\\Atlas\\processed schemata", "C:\\Atlas_test\\output", 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		gmlLoader = gmlFactory.createGraphmlLoader(INPUT_FOLDER.concat("/layout.graphml"));
+		diag.loadDiachronicGraph(gmlLoader.getNodes(), gmlLoader.getEdges());
 		pFactory = new ParserFactory();
 		parser = pFactory.createHecateParser();
-		diag.setVersions(parser.getLifetime("C:\\Users\\PANOS\\Documents\\EvolutionDatasets\\CERN\\Atlas\\processed schemata"));
+		diag.setVersions(parser.getLifetime(INPUT_FOLDER.concat("/processed schemata")));
 		metric=Metric_Enums.GRAPH_DIAMETER;
-		graphArray = new GraphMetricsReport("C:\\Atlas_test\\output\\tests",metric,diag);
+		
+		gFactory = new GraphMetricsFactory();
+		graphMetrics = gFactory.getDiachronicGraphMetrics(diag.getNodes(), diag.getEdges());
+		
+		repFactory = new ReportFactory();
+		graphReport = (GraphMetricsReport) repFactory.getMetricsReportEngine(OUTPUT_FOLDER, metric, diag, graphMetrics);
 	}
 
 	@AfterClass
@@ -70,12 +86,12 @@ public class GraphMetricsReportTest {
 
 	@Test
 	public void testGetDiachronicGraphMetricValue() {
-		assertNotNull("DiachronicGraphMetricValue not null", graphArray.getDiachronicGraphMetricValue(metric.name()));
+		assertNotNull("DiachronicGraphMetricValue not null", graphReport.getDiachronicGraphMetricValue(metric.name()));
 	}
 
 	@Test
 	public void testGetVersionMetricValue() {
-		assertNotNull("VersionMetricValue not null", graphArray.getVersionMetricValue(metric.name(),2));	
+		assertNotNull("VersionMetricValue not null", graphReport.getVersionMetricValue(metric.name(),2));	
 	}
 
 }
