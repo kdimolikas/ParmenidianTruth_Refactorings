@@ -2,8 +2,8 @@ package dataImport;
 
 import java.util.ArrayList;
 
-import model.ForeignKey;
-import model.Table;
+import model.constructs.ForeignKey;
+import model.constructs.Table;
 
 
 /**

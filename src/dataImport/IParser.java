@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import java.util.Map;
 
-import model.DBVersion;
+import model.constructs.DBVersion;
 
 
 /**
@@ -21,8 +21,8 @@ public interface IParser {
 	public ArrayList<DBVersion> getLifetime(String sqlFiles);
 	public ArrayList<Map<String,Integer>> getTransitions(String xmlFile);
 	public void createGraphmlLoader(String graphml) throws FileNotFoundException;
-	public ArrayList<model.Table> getNodes();
-	public ArrayList<model.ForeignKey> getEdges();
+	public ArrayList<model.constructs.Table> getNodes();
+	public ArrayList<model.constructs.ForeignKey> getEdges();
 	public void createTransitions(File selectedFile) throws Exception;
 	public IGraphmlLoader getGraphmlLoader() throws FileNotFoundException;//2018-10-04
 

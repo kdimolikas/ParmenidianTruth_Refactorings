@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
-import model.DBVersion;
+import model.constructs.DBVersion;
 
 /**
  * 	Responsible for utilizing data provided by Hecate ({@link externalTools} package) to create 

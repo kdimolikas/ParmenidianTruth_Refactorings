@@ -15,7 +15,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.antlr.v4.runtime.RecognitionException;
 
-import externalTools.Attribute;
+
 import externalTools.Deletion;
 import externalTools.Delta;
 import externalTools.HecateParser;
@@ -27,9 +27,8 @@ import externalTools.TransitionList;
 import externalTools.Transitions;
 import externalTools.Update;
 import fileFilter.SQLFileFilter;
-import model.DBVersion;
-import model.ForeignKey;
-
+import model.constructs.DBVersion;
+import model.constructs.ForeignKey;
 import parmenidianEnumerations.Status;
 
 public class HecateImportManager implements IHecateImportManager {
@@ -83,6 +82,7 @@ public class HecateImportManager implements IHecateImportManager {
 	}
 	
 	
+	@SuppressWarnings("static-access")
 	private void createTransitions(File[] sqlFiles,File directorySelected){
 		
 		HecateParser parser= new HecateParser();
@@ -139,10 +139,10 @@ public class HecateImportManager implements IHecateImportManager {
 		  Schema schema1 = parser.parse(version.getAbsolutePath());		
 		  
 		  ArrayList<String> tableList =schema1.getAllTables();
-		  ArrayList<model.Table> tablesWithin=new ArrayList<model.Table>();
+		  ArrayList<model.constructs.Table> tablesWithin=new ArrayList<model.constructs.Table>();
 			
 		  for(int i=0;i<tableList.size();++i){
-			model.Table  tb = new model.Table(tableList.get(i));
+			model.constructs.Table  tb = new model.constructs.Table(tableList.get(i));
 			tablesWithin.add(tb);
 		  }
 		  

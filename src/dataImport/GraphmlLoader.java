@@ -18,8 +18,8 @@ import edu.uci.ics.jung.io.graphml.GraphMetadata;
 import edu.uci.ics.jung.io.graphml.HyperEdgeMetadata;
 import edu.uci.ics.jung.io.graphml.NodeMetadata;
 import edu.uci.ics.jung.io.graphml.GraphMetadata.EdgeDefault;
-import model.ForeignKey;
-import model.Table;
+import model.constructs.ForeignKey;
+import model.constructs.Table;
 
 public class GraphmlLoader implements IGraphmlLoader {
 

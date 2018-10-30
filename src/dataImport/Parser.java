@@ -5,10 +5,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import model.DBVersion;
-import model.ForeignKey;
-
-import model.Table;
+import model.constructs.DBVersion;
+import model.constructs.ForeignKey;
+import model.constructs.Table;
 
 public class Parser implements IParser {
 
