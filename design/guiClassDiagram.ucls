@@ -1,88 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.2.1" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+<class-diagram version="1.2.2" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="gui.Gui" project="ParmenidianTruth_Refactoring" 
-    file="/ParmenidianTruth_Refactoring/src/gui/Gui.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="1075" width="292" x="236" y="337"/>    
+  <class id="1" language="java" name="gui.EdgeChooser" project="ParmenidianTruth" 
+    file="/ParmenidianTruth/src/gui/EdgeChooser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="342" y="1365"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="gui.OutputChooser" project="ParmenidianTruth_Refactoring" 
-    file="/ParmenidianTruth_Refactoring/src/gui/OutputChooser.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="173" width="237" x="-207" y="1452"/>    
+  <class id="2" language="java" name="gui.ProjectEditor" project="ParmenidianTruth" 
+    file="/ParmenidianTruth/src/gui/ProjectEditor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="107" width="418" x="232" y="35"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="gui.EdgeChooser" project="ParmenidianTruth_Refactoring" 
-    file="/ParmenidianTruth_Refactoring/src/gui/EdgeChooser.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="217" width="200" x="70" y="1452"/>    
+  <class id="3" language="java" name="gui.MetricsChooser" project="ParmenidianTruth" 
+    file="/ParmenidianTruth/src/gui/MetricsChooser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="837" y="74"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="gui.ProjectEditor" project="ParmenidianTruth_Refactoring" 
-    file="/ParmenidianTruth_Refactoring/src/gui/ProjectEditor.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="107" width="418" x="310" y="1452"/>    
+  <class id="4" language="java" name="gui.WorkspaceChooser" project="ParmenidianTruth" 
+    file="/ParmenidianTruth/src/gui/WorkspaceChooser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="239" width="196" x="1013" y="35"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="gui.WorkspaceChooser" project="ParmenidianTruth_Refactoring" 
-    file="/ParmenidianTruth_Refactoring/src/gui/WorkspaceChooser.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-22" y="469"/>    
+  <class id="5" language="java" name="gui.Gui" project="ParmenidianTruth" file="/ParmenidianTruth/src/gui/Gui.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="1075" width="292" x="690" y="424"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="gui.MetricsChooser" project="ParmenidianTruth_Refactoring" 
-    file="/ParmenidianTruth_Refactoring/src/gui/MetricsChooser.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="349" width="283" x="768" y="1452"/>    
+  <class id="6" language="java" name="gui.OutputChooser" project="ParmenidianTruth" 
+    file="/ParmenidianTruth/src/gui/OutputChooser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1156" y="1365"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="7">    
+  <dependency id="7">    
+    <bendpoint x="1156" y="962"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="8">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="9">    
+    <bendpoint x="753" y="320"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <association id="10">    
+    <bendpoint x="342" y="961"/>    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="8" name="parent"/>      
-      <multiplicity id="9" minimum="0" maximum="1"/>    
+      <attribute id="11" name="edgeChooser">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="12" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="10">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="11">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <dependency id="12">    
-    <end type="SOURCE" refId="1"/>    
+  <dependency id="13">    
+    <bendpoint x="441" y="588"/>    
+    <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="2"/>  
   </dependency>  
-  <association id="13">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="14" name="edgeChooser"/>      
-      <multiplicity id="15" minimum="0" maximum="1"/>    
+  <dependency id="14">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="15">    
+    <bendpoint x="1111" y="623"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="16" name="parent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="17" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <dependency id="18">    
+    <bendpoint x="924" y="327"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
