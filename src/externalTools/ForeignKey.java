@@ -54,14 +54,14 @@ public class ForeignKey {
 		}
 	}
 	
-	public ArrayList<model.ForeignKey> getForeingKeys(){
+	public ArrayList<model.constructs.ForeignKey> getForeingKeys(){
 		
-		ArrayList<model.ForeignKey> foreingKeysOfVersion  = new ArrayList<model.ForeignKey>();
+		ArrayList<model.constructs.ForeignKey> foreingKeysOfVersion  = new ArrayList<model.constructs.ForeignKey>();
 		
 		for (Map.Entry<Attribute, Attribute> entry : this.references.entrySet()) {
 			Attribute or = entry.getKey();
 			Attribute re = entry.getValue();
-			model.ForeignKey fk=new model.ForeignKey(or.getTable().getName(),re.getTable().getName());
+			model.constructs.ForeignKey fk=new model.constructs.ForeignKey(or.getTable().getName(),re.getTable().getName());
 			foreingKeysOfVersion.add(fk);
 		}
 		
