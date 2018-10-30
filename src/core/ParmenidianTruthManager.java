@@ -18,7 +18,7 @@ import export.IExportManager;
  * Handles all use cases of PT tool.
  * @author MK
  * @version 1.0
- *
+ * @nodified by KD on 2018-10-30
  */
 
 public class ParmenidianTruthManager implements IParmenidianTruth{

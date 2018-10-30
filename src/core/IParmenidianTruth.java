@@ -38,8 +38,7 @@ public interface IParmenidianTruth {
 	public Component refresh(double forceMult, int repulsionRange);
 	
 	public void generateMetricsReport(String targetFolder, ArrayList<Metric_Enums> metrics);
-	
-	
+		
 	public void createTransitions(File selectedFile) throws Exception;
 	
 	

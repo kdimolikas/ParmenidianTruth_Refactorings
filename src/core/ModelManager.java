@@ -5,10 +5,9 @@ import java.awt.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
-import dataImport.ParserFactory;
 import dataImport.IGraphmlLoader;
 import dataImport.IParser;
+import dataImport.ParserFactory;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import model.constructs.DiachronicGraphFactory;
 import model.constructs.IDiachronicGraph;
@@ -18,11 +17,13 @@ import model.metricsReport.IMetricsReport;
 import model.metricsReport.ReportFactory;
 import parmenidianEnumerations.Metric_Enums;
 
+
+
 /**
  * Operating as a manager that communicates with {@link model}
  * @author MK
  * @version {2.0 - modified by KD-MZ-IK}
- * @modified by KD on 2018-10-05
+ * @modified by KD on 2018-10-30
  */
 
 public class ModelManager {
