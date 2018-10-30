@@ -1,9 +1,15 @@
-package model;
+package model.metricsReport;
 
 import java.io.File;
 import parmenidianEnumerations.Metric_Enums;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
+import model.constructs.DBVersion;
+import model.constructs.ForeignKey;
+import model.constructs.Table;
+import model.graphMetrics.GraphMetricsFactory;
+import model.graphMetrics.IGraphMetrics;
 
 
 /**
@@ -20,6 +26,8 @@ public abstract class MetricsReportEngine implements IMetricsReport{
 	private File reportFile;
 	protected ArrayList<DBVersion> versions;
 	protected IGraphMetrics graphMetricsOfDiachronicGraph;
+	protected IGraphMetrics versionGraphMetrics;
+	private GraphMetricsFactory graphFactory;
 	protected int lines;
 	protected int columns;
 	protected ArrayList<Table>  vertices;
@@ -28,7 +36,26 @@ public abstract class MetricsReportEngine implements IMetricsReport{
 	protected String[][] report; 
 	private PrintWriter writer;
 	
+	
+	
+	protected void setDiachronicGraphMetrics(IGraphMetrics gm) {
+		
+		this.graphFactory = new GraphMetricsFactory();
+		this.graphMetricsOfDiachronicGraph = this.graphFactory.getDiachronicGraphMetrics(vertices, edges);
+		this.graphMetricsOfDiachronicGraph = gm;
+		
+	}
+	
+	
+	protected void setVersionGraphMetrics(ArrayList<Table> tables,ArrayList<ForeignKey> keys ) {
+		
+		this.graphFactory = new GraphMetricsFactory();
+		this.versionGraphMetrics = this.graphFactory.getDBVersionMetrics(tables, keys);
+		
+	}
+	
 	//Template method: determines steps to create metrics reports
+	//public void generateMetricsReport(){
 	public void generateMetricsReport(){
 		
 				

@@ -1,4 +1,4 @@
-package model;
+package model.constructs;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,6 +18,7 @@ import org.apache.commons.collections15.Transformer;
 import parmenidianEnumerations.Status;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -34,6 +35,7 @@ public class DBVersionVisualRepresentation {
 	private String episodeName;
 	@SuppressWarnings("unused")
 	private int width,height;
+	@SuppressWarnings("unused")
 	private DBVersion parent;
 	private VisualizationViewer<String, String> visualizationViewer ;
 
@@ -60,10 +62,13 @@ public class DBVersionVisualRepresentation {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void createEpisodes(VisualizationViewer< String, String> avv,ConcurrentHashMap<String, Table> graph,Dimension universalFrame,Rectangle universalBounds,Point2D universalCenter,double frameX,double frameY,double scaleX,double scaleY) {
+	public void createEpisodes(VisualizationViewer< String, String> avv,ConcurrentHashMap<String, Table> graph,
+			Dimension universalFrame,Rectangle universalBounds,Point2D universalCenter,
+			double frameX,double frameY,double scaleX,double scaleY,Graph<String,String> g) {
 
 		
-		layout = new StaticLayout<String, String>(parent.getGraph());
+		//layout = new StaticLayout<String, String>(parent.getGraph());
+		layout = new StaticLayout<String, String>(g);
 
 		layout.setSize(universalFrame);
 		this.visualizationViewer =  avv;

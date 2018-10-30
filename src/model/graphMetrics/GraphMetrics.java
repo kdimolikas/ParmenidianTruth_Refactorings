@@ -1,4 +1,4 @@
-package model;
+package model.graphMetrics;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.jung.algorithms.cluster.BicomponentClusterer;
 import edu.uci.ics.jung.algorithms.cluster.WeakComponentClusterer;
 import edu.uci.ics.jung.algorithms.filters.FilterUtils;
 import edu.uci.ics.jung.algorithms.importance.BetweennessCentrality;
@@ -17,16 +16,17 @@ import edu.uci.ics.jung.algorithms.transformation.DirectionTransformer;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import model.constructs.ForeignKey;
+import model.constructs.Table;
 
 @SuppressWarnings("rawtypes")
-public class GraphMetrics extends BicomponentClusterer implements IGraphMetrics{
+public abstract class GraphMetrics implements IGraphMetrics{ 
+//extends BicomponentClusterer implements IGraphMetrics{
 	
-	private Graph<String, String> graph;
+	protected Graph<String, String> graph;
 
 	
 	public GraphMetrics(ArrayList<Table> nodes, ArrayList<ForeignKey> edges){
-		
-		super();
 		
 		graph = new DirectedSparseGraph<String, String>();
 		addNodes(nodes);
@@ -55,62 +55,127 @@ public class GraphMetrics extends BicomponentClusterer implements IGraphMetrics{
 
 	}
 	
+	public abstract String generateVertexDegree(String vertex);
+	
 	@SuppressWarnings("unchecked")
-	public String generateVertexDegree(String vertex){
-		
+	public String generateVrtxDeg(String vertex) {
 		
 		vertex=vertex.replace(",","").trim();
 		
 		DegreeScorer ds = new DegreeScorer(graph);
-
 	
 		return ds.getVertexScore(vertex)+",";
 		
 	}
 	
+	public abstract String generateVertexBetweenness(String vertex);
 	
 	@SuppressWarnings("unchecked")
-	public String generateVertexBetweenness(String vertex){
+	public String generateVrtxBtwn(String vrtx) {
 		
-		vertex=vertex.replace(",","").trim();
+		vrtx=vrtx.replace(",","").trim();
 		
 		
 		 BetweennessCentrality ranker = new BetweennessCentrality(graph);
 		 ranker.setRemoveRankScoresOnFinalize(false);
 		 ranker.evaluate();
 		
-		return ranker.getVertexRankScore(vertex)+",";
+		return ranker.getVertexRankScore(vrtx)+",";
 		
 	}
 	
+	public abstract String generateEdgeBetweenness(String edge);
+	
 	@SuppressWarnings("unchecked")
-	public String generateEdgeBetweenness(String edge){
-		
+	public String generateEdgeBtwn(String edge) {
 		
 		edge=edge.replace(",","").trim();
 
-		 BetweennessCentrality ranker = new BetweennessCentrality(graph);
-		 ranker.setRemoveRankScoresOnFinalize(false);
-		 ranker.evaluate();
-		
+		BetweennessCentrality ranker = new BetweennessCentrality(graph);
+		ranker.setRemoveRankScoresOnFinalize(false);
+		ranker.evaluate();
+
 		return ranker.getEdgeRankScore(edge)+",";
-		
 		
 	}
 	
-	public String generateVertexInDegree(String vertex){
+	public abstract String generateVertexInDegree(String vertex);
+	
+	public String generateVrtxInDeg(String vertex) {
 		
 		vertex=vertex.replace(",","").trim();
 		
 		return graph.inDegree(vertex)+",";
+		
 	}
 	
-	public String generateVertexOutDegree(String vertex){
+	public abstract String generateVertexOutDegree(String vertex);
+	
+	public String generateVrtxOutDeg(String vertex) {
 		
 		vertex=vertex.replace(",","").trim();
 		
 		return graph.outDegree(vertex)+",";
+		
+		
 	}
+	
+//	@SuppressWarnings("unchecked")
+//	public String generateVertexDegree(String vertex){
+//		
+//		
+//		vertex=vertex.replace(",","").trim();
+//		
+//		DegreeScorer ds = new DegreeScorer(graph);
+//
+//	
+//		return ds.getVertexScore(vertex)+",";
+//		
+//	}
+//	
+//	
+//	@SuppressWarnings("unchecked")
+//	public String generateVertexBetweenness(String vertex){
+//		
+//		vertex=vertex.replace(",","").trim();
+//		
+//		
+//		 BetweennessCentrality ranker = new BetweennessCentrality(graph);
+//		 ranker.setRemoveRankScoresOnFinalize(false);
+//		 ranker.evaluate();
+//		
+//		return ranker.getVertexRankScore(vertex)+",";
+//		
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	public String generateEdgeBetweenness(String edge){
+//		
+//		
+//		edge=edge.replace(",","").trim();
+//
+//		 BetweennessCentrality ranker = new BetweennessCentrality(graph);
+//		 ranker.setRemoveRankScoresOnFinalize(false);
+//		 ranker.evaluate();
+//		
+//		return ranker.getEdgeRankScore(edge)+",";
+//		
+//		
+//	}
+//	
+//	public String generateVertexInDegree(String vertex){
+//		
+//		vertex=vertex.replace(",","").trim();
+//		
+//		return graph.inDegree(vertex)+",";
+//	}
+//	
+//	public String generateVertexOutDegree(String vertex){
+//		
+//		vertex=vertex.replace(",","").trim();
+//		
+//		return graph.outDegree(vertex)+",";
+//	}
 	
 	public String getVertexCount(){
 		

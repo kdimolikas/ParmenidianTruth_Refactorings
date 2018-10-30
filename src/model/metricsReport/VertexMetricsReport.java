@@ -1,7 +1,10 @@
-package model;
+package model.metricsReport;
+
 
 import java.util.Map;
 
+import model.constructs.IDiachronicGraph;
+import model.graphMetrics.IGraphMetrics;
 import parmenidianEnumerations.Metric_Enums;
 
 
@@ -14,16 +17,22 @@ import parmenidianEnumerations.Metric_Enums;
 
 public class VertexMetricsReport extends MetricsReportEngine {
 	
-	public VertexMetricsReport(String targetFolder, Metric_Enums metric,IDiachronicGraph diachronicGraph){
+	
+	//GraphMetricsFactory gmFactory;
+	
+	
+	public VertexMetricsReport(String targetFolder, Metric_Enums metric,IDiachronicGraph diachronicGraph, IGraphMetrics gm){
 		
-		
+		//gmFactory = new GraphMetricsFactory();
 		this.metric = metric;
 		this.edges = diachronicGraph.getEdges();
 		this.vertices = diachronicGraph.getNodes();
+		super.setDiachronicGraphMetrics(gm);
 		this.versions = diachronicGraph.getVersions();
 		this.columns = this.versions.size()+2;
-		this.graphMetricsOfDiachronicGraph = diachronicGraph.getGraphMetrics();
+		//this.graphMetricsOfDiachronicGraph = diachronicGraph.getGraphMetrics();//2018-10-28
 		this.targetFolder = targetFolder;
+		
 				
 	}
 		
@@ -45,7 +54,7 @@ public class VertexMetricsReport extends MetricsReportEngine {
 		report[0][1]="Diachronic Graph,";		
 		for(int i=0;i<versions.size();i++){			
 
-			report[0][i+2]=versions.get(i).getVersion()+",";
+			report[0][i+2]=versions.get(i).getVersionName()+",";
 		}
 
 		//create 1st column			
@@ -90,8 +99,12 @@ public class VertexMetricsReport extends MetricsReportEngine {
 
 					}else{
 
-						if(collection==null)
-							collection = versions.get(i-2).getClusteringCoefficient();
+						if(collection==null) {
+							super.setVersionGraphMetrics(versions.get(i-2).getVersionTables(), versions.get(i-2).getVersionForeignKeys());
+							collection = super.versionGraphMetrics.getClusteringCoefficient();
+						}
+							//this.graphMetricsOfDiachronicGraph.getClusteringCoefficient(); 
+							//versions.get(i-2).getClusteringCoefficient();
 
 						String candidate =report[j][0].replace(",", "");
 						String clusteringCoefficientScore=String.valueOf(collection.get(candidate));
@@ -132,18 +145,25 @@ public class VertexMetricsReport extends MetricsReportEngine {
 		
 	public String getVersionMetricValue(String m,int i,String tableName){
 
+		//IGraphMetrics gm = gmFactory.getDBVersionMetrics(versions.get(i-2).getVersionTables(), versions.get(i-2).getVersionForeignKeys());
+		super.setVersionGraphMetrics(versions.get(i-2).getVersionTables(),versions.get(i-2).getVersionForeignKeys());
 
 		switch(m){
 
-		case "VERTEX_OUT_DEGREE":	return versions.get(i-2).generateVertexOutDegree(tableName);
+		case "VERTEX_OUT_DEGREE":	return super.versionGraphMetrics.generateVertexOutDegree(tableName);
+			//return versions.get(i-2).generateVertexOutDegree(tableName);
 
-		case "VERTEX_IN_DEGREE":	return versions.get(i-2).generateVertexInDegree(tableName);
+		case "VERTEX_IN_DEGREE": return super.versionGraphMetrics.generateVertexInDegree(tableName);	
+			//return versions.get(i-2).generateVertexInDegree(tableName);
 
-		case "EDGE_BETWEENNESS":	return versions.get(i-2).generateEdgeBetweenness(tableName);
+		case "EDGE_BETWEENNESS": return super.versionGraphMetrics.generateEdgeBetweenness(tableName);	
+			//return versions.get(i-2).generateEdgeBetweenness(tableName);
 
-		case "VERTEX_BETWEENNESS":	return versions.get(i-2).generateVertexBetweenness(tableName);			
+		case "VERTEX_BETWEENNESS": return super.versionGraphMetrics.generateVertexBetweenness(tableName);	
+			//return versions.get(i-2).generateVertexBetweenness(tableName);			
 
-		case "VERTEX_DEGREE":	return versions.get(i-2).generateVertexDegree(tableName);
+		case "VERTEX_DEGREE": return super.versionGraphMetrics.generateVertexDegree(tableName);	
+			//return versions.get(i-2).generateVertexDegree(tableName);
 
 		default:	return "";
 		}

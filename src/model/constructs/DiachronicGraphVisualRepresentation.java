@@ -1,4 +1,4 @@
-package model;
+package model.constructs;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -25,6 +25,8 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout2;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.io.GraphMLWriter;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -35,6 +37,7 @@ import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
+//import model.graphMetrics.IGraphMetrics;
 
 public class DiachronicGraphVisualRepresentation {
 
@@ -53,17 +56,21 @@ public class DiachronicGraphVisualRepresentation {
 	private Transformer edgeType;
 	private  MutableTransformer universalTransformerForTranslation;
 	private  MutableTransformer universalTransformerForScaling;
-	private DiachronicGraph parent;
+//	private DiachronicGraph parent;
+	//private IGraphMetrics parent;
+	private Graph<String,String> graph;
 
 	
 	public DiachronicGraphVisualRepresentation() {}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public DiachronicGraphVisualRepresentation(DiachronicGraph p,ArrayList<Table> tables,ArrayList<ForeignKey> fks,String in, String tf, int et,int mode,double frameX,double frameY,double scaleX,double scaleY,double centerX,double centerY) {		
+	public DiachronicGraphVisualRepresentation(DiachronicGraph p,ArrayList<Table> tables,ArrayList<ForeignKey> fks,Graph<String,String> g,
+			String in,String tf, int et,int mode,double frameX,double frameY,double scaleX,double scaleY,double centerX,double centerY) {		
 		
 		edgeType = et == 0 ? new EdgeShape.Line<String, String>(): new EdgeShape.Orthogonal<String, String>();
-		parent=p;
-
+		//parent=p;
+		graph = new DirectedSparseGraph<String, String>();
+		graph = p.getGraph();
 		nodes=tables;
 		edges=fks;
 		inputFolder=in;
@@ -71,7 +78,8 @@ public class DiachronicGraphVisualRepresentation {
 		outputFolder = tf;
 		new File(targetFolder ).mkdir();
 
-		layout= new SpringLayout2<String, String>(parent.getGraph());
+	//	layout= new SpringLayout2<String, String>(parent.getGraph());
+		layout= new SpringLayout2<String, String>(graph);
 
 		universalFrame =new Dimension(nodes.size()*26, nodes.size()*26);
 
@@ -130,6 +138,7 @@ public class DiachronicGraphVisualRepresentation {
 		return visualizationViewer;
 	}
 
+	
 	public void setTransformingMode() {
 
 		graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
@@ -177,7 +186,8 @@ public class DiachronicGraphVisualRepresentation {
 			        }		    
 			);
 
-		graphWriter.save(parent.getGraph(), out);
+		//graphWriter.save(parent.getGraph(), out);
+		graphWriter.save(graph, out);
 		
 		updateIniFile(projectIni);
 		

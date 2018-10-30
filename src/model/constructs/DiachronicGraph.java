@@ -1,4 +1,4 @@
-package model;
+package model.constructs;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -10,8 +10,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import parmenidianEnumerations.Status;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+//import model.graphMetrics.GraphMetricsFactory;
+//import model.graphMetrics.IGraphMetrics;
+//import model.graphMetrics.GraphMetricsFactory;
+//import model.graphMetrics.IGraphMetrics;
 
 /**
  * Holds data about schema evolution and manipulates diachronic graph.
@@ -34,9 +39,9 @@ public class DiachronicGraph implements IDiachronicGraph{
 	private ArrayList<ForeignKey> edges= new ArrayList<ForeignKey>();//union of edges
 
 	private DiachronicGraphVisualRepresentation visualizationOfDiachronicGraph;
-	private IGraphMetrics graphMetricsOfDiachronicGraph;
-	private GraphMetricsFactory gmFactory= new GraphMetricsFactory();
-	
+	//private IGraphMetrics graphMetricsOfDiachronicGraph;
+	//private GraphMetricsFactory gmFactory= new GraphMetricsFactory();
+	private Graph<String,String> grph;
 	
 	public DiachronicGraph() {}
 
@@ -54,45 +59,90 @@ public class DiachronicGraph implements IDiachronicGraph{
 	}
 	
 	//added by KD on 2018-02-15
+//	@Override
+//	public void loadDiachronicGraph(ArrayList<Table> v, ArrayList<ForeignKey> e, String in, String tf, int et,double frameX,double frameY,double scaleX,double scaleY,double centerX,double centerY) {
+//		
+//		int mode;
+//		
+//		this.setVertices(v);
+//		this.setEdges(e);
+//		fixGraph();	
+//		mode=1;
+//		//generateGraphMetrics();
+//		createVisualizer(in, tf, et,mode,frameX,frameY,scaleX,scaleY,centerX,centerY);
+//	}
+	
+	
 	@Override
-	public void loadDiachronicGraph(ArrayList<Table> v, ArrayList<ForeignKey> e, String in, String tf, int et,double frameX,double frameY,double scaleX,double scaleY,double centerX,double centerY) {
+	public void loadDiachronicGraph(ArrayList<Table> v, ArrayList<ForeignKey> e) {
 		
 		int mode;
 		
 		this.setVertices(v);
 		this.setEdges(e);
 		fixGraph();	
-		mode=1;
-		generateGraphMetrics();
-		createVisualizer(in, tf, et,mode,frameX,frameY,scaleX,scaleY,centerX,centerY);
+		
+		
 	}
 	
-	
 	//added by KD on 2018-02-15
-	@Override
-	public void createDiachronicGraph(String in, String tf, int et,double frameX,double frameY,double scaleX,double scaleY,double centerX,double centerY) {
+//	@Override
+//	public void createDiachronicGraph(String in, String tf, int et,double frameX,double frameY,
+//			double scaleX,double scaleY,double centerX,double centerY) {
+//		
+//		int mode;
+//		
+//		createDiachronicGraph();
+//		//this.grph = new DirectedSparseGraph<String, String>();
+//		mode=0;
+//		//generateGraphMetrics();
+//		createVisualizer(in, tf, et,mode,frameX,frameY,scaleX,scaleY,centerX,centerY);
+//	}
+//	
+	
+	public void createDiachronicGraph() {
 		
-		int mode;
+		for(int i=0;i<versions.size();++i){
+			
+			for(Table mt : versions.get(i).getVersionTables())
+				graph.putIfAbsent(mt.getKey(), mt);//union of tables
+			
+			for(ForeignKey fk : versions.get(i).getVersionForeignKeys())
+				graphEdges.putIfAbsent(fk.getKey(), fk);//union of FK
+		}
 		
-		createDiachronicGraph();
-		mode=0;
-		generateGraphMetrics();
-		createVisualizer(in, tf, et,mode,frameX,frameY,scaleX,scaleY,centerX,centerY);
+		transformNodes();
+		transformEdges();
+		
 	}
 
-	//added by KD on 2018-02-15
-	private void generateGraphMetrics() {
+	public void createVisualizer(String in, String tf, int et,int mode,double frameX,double frameY,
+			double scaleX,double scaleY,double centerX,double centerY) {
 		
-		graphMetricsOfDiachronicGraph = gmFactory.getGraphMetrics(vertices,edges);
+		//this.grph = new DirectedSparseGraph<String, String>();
+		
+		visualizationOfDiachronicGraph = new DiachronicGraphVisualRepresentation(this,vertices,edges,this.grph,in,tf,et,mode,frameX,frameY,
+				scaleX,scaleY,centerX,centerY);
 		
 	}
 	
+	
 	//added by KD on 2018-02-15
-	private void createVisualizer(String in, String tf, int et,int mode,double frameX,double frameY,double scaleX,double scaleY,double centerX,double centerY) {
-		
-		visualizationOfDiachronicGraph = new DiachronicGraphVisualRepresentation(this,vertices,edges,in,tf,et,mode,frameX,frameY,scaleX,scaleY,centerX,centerY);
-		
-	}
+//	private void generateGraphMetrics() {
+//		
+//		graphMetricsOfDiachronicGraph = gmFactory.getGraphMetrics(vertices,edges);
+//		
+//	}
+	
+	//added by KD on 2018-02-15
+//	private void createVisualizer(String in, String tf, int et,int mode,double frameX,double frameY,
+//			double scaleX,double scaleY,double centerX,double centerY) {
+//		
+//		//this.grph = new DirectedSparseGraph<String, String>();
+//		visualizationOfDiachronicGraph = new DiachronicGraphVisualRepresentation(this,vertices,edges,this.grph,in,tf,et,mode,frameX,frameY,
+//				scaleX,scaleY,centerX,centerY);
+//		
+//	}
 
 
 	/**
@@ -103,10 +153,10 @@ public class DiachronicGraph implements IDiachronicGraph{
 	 */
 	private void setFirstVersion(DBVersion versionFirst){
 		
-		for(int i=0;i<versionFirst.getTables().size();++i)
-			if(transitions.get(0).containsKey(versionFirst.getTables().get(i).getKey())
-			&& transitions.get(0).get(versionFirst.getTables().get(i).getKey())==Status.DELETION.getValue())
-				versionFirst.getTables().get(i).setTableStatus(Status.DELETION.getValue());		
+		for(int i=0;i<versionFirst.getVersionTables().size();++i)
+			if(transitions.get(0).containsKey(versionFirst.getVersionTables().get(i).getKey())
+			&& transitions.get(0).get(versionFirst.getVersionTables().get(i).getKey())==Status.DELETION.getValue())
+				versionFirst.getVersionTables().get(i).setTableStatus(Status.DELETION.getValue());		
 		
 	}
 	
@@ -121,25 +171,25 @@ public class DiachronicGraph implements IDiachronicGraph{
 	 */
 	private void setFinalVersion(DBVersion versionFinal,int k){
 		
-		for(int i=0;i<versionFinal.getTables().size();++i)
-			if(transitions.get(k-1).containsKey(versionFinal.getTables().get(i).getKey())
-			&& transitions.get(k-1).get(versionFinal.getTables().get(i).getKey())!=Status.DELETION.getValue())
-				versionFinal.getTables().get(i).setTableStatus(transitions.get(k-1).get(versionFinal.getTables().get(i).getKey()));
+		for(int i=0;i<versionFinal.getVersionTables().size();++i)
+			if(transitions.get(k-1).containsKey(versionFinal.getVersionTables().get(i).getKey())
+			&& transitions.get(k-1).get(versionFinal.getVersionTables().get(i).getKey())!=Status.DELETION.getValue())
+				versionFinal.getVersionTables().get(i).setTableStatus(transitions.get(k-1).get(versionFinal.getVersionTables().get(i).getKey()));
 		
 	}
 	
 	private void setIntermediateVersion(DBVersion version,int k){
 		
-		for(int i=0;i<version.getTables().size();++i){
+		for(int i=0;i<version.getVersionTables().size();++i){
 			//koitaw to mellontiko m dictionary
-			if(transitions.get(k).containsKey(version.getTables().get(i).getKey())
-			&& transitions.get(k).get(version.getTables().get(i).getKey())==Status.DELETION.getValue())
-				version.getTables().get(i).setTableStatus(Status.DELETION.getValue());
+			if(transitions.get(k).containsKey(version.getVersionTables().get(i).getKey())
+			&& transitions.get(k).get(version.getVersionTables().get(i).getKey())==Status.DELETION.getValue())
+				version.getVersionTables().get(i).setTableStatus(Status.DELETION.getValue());
 			
 			//koitaw to palho m dictionary
-			if(transitions.get(k-1).containsKey(version.getTables().get(i).getKey())
-			&& transitions.get(k-1).get(version.getTables().get(i).getKey())!=Status.DELETION.getValue())
-				version.getTables().get(i).setTableStatus(transitions.get(k-1).get(version.getTables().get(i).getKey()));				
+			if(transitions.get(k-1).containsKey(version.getVersionTables().get(i).getKey())
+			&& transitions.get(k-1).get(version.getVersionTables().get(i).getKey())!=Status.DELETION.getValue())
+				version.getVersionTables().get(i).setTableStatus(transitions.get(k-1).get(version.getVersionTables().get(i).getKey()));				
 		}
 	}
 
@@ -153,21 +203,7 @@ public class DiachronicGraph implements IDiachronicGraph{
 		}		
 	}
 
-	private void createDiachronicGraph() {
-		
-		for(int i=0;i<versions.size();++i){
-			
-			for(Table mt : versions.get(i).getTables())
-				graph.putIfAbsent(mt.getKey(), mt);//union of tables
-			
-			for(ForeignKey fk : versions.get(i).getVersionForeignKeys())
-				graphEdges.putIfAbsent(fk.getKey(), fk);//union of FK
-		}
-		
-		transformNodes();
-		transformEdges();
-		
-	}
+
 
 	private void transformEdges() {
 
@@ -269,14 +305,18 @@ public class DiachronicGraph implements IDiachronicGraph{
 		
 	}
 	
-	public void visualizeIndividualDBVersions(VisualizationViewer< String, String> vizualizationViewer,String targetFolder,int edgeType){
+	public void visualizeIndividualDBVersions(VisualizationViewer< String, String> vizualizationViewer,
+			String targetFolder,int edgeType){
 		
 		int width = visualizationOfDiachronicGraph.getWidthOfVisualizationViewer();
 		int height = visualizationOfDiachronicGraph.getHeightOfVisualizationViewer();
 		
 		for(int i=0;i<versions.size();++i){
+			
+			//GraphMetricsFactory gmFactory = new GraphMetricsFactory();
+			//IGraphMetrics gm = gmFactory.getDBVersionMetrics(versions.get(i).getVersionTables(), versions.get(i).getVersionForeignKeys());
 			versions.get(i).setDetails(targetFolder, edgeType,width,height);
-			versions.get(i).visualizeEpisode(vizualizationViewer,this);
+			versions.get(i).visualizeEpisode(vizualizationViewer,this,versions.get(i).getVersionGraph());
 		}
 		
 	}
@@ -319,11 +359,23 @@ public class DiachronicGraph implements IDiachronicGraph{
 		return visualizationOfDiachronicGraph.getFrameY();
 	}
 	
-	public Graph getGraph(){
+	
+	public Graph<String,String> getGraph(){
 		
-		return graphMetricsOfDiachronicGraph.getGraph();
+		return this.grph;
+	}
+	
+	public void setGraph(Graph<String,String> g) {
+		
+		this.grph = g;
 		
 	}
+	
+//	public Graph getGraph(){
+//		
+//		return graphMetricsOfDiachronicGraph.getGraph();
+//		
+//	}
 
 	public Component refresh(double forceMult, int repulsionRange) {
 		
@@ -350,13 +402,13 @@ public class DiachronicGraph implements IDiachronicGraph{
 
 	
 //created by KD on 13/04/17	
-	public IGraphMetrics getGraphMetrics(){
-
-
-		return graphMetricsOfDiachronicGraph;
-
-
-	}
+//	public IGraphMetrics getGraphMetrics(){
+//
+//
+//		return graphMetricsOfDiachronicGraph;
+//
+//
+//	}
 	
 	
 	//created by KD on 2018-02-14

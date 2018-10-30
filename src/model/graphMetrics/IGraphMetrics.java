@@ -1,4 +1,4 @@
-package model;
+package model.graphMetrics;
 
 import java.util.Map;
 

@@ -1,10 +1,12 @@
-package model;
+package model.constructs;
 
 import java.util.ArrayList;
-import java.util.Map;
 
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+//import model.graphMetrics.GraphMetricsFactory;
+//import model.graphMetrics.IGraphMetrics;
 
 /**
  * 
@@ -20,8 +22,9 @@ public class DBVersion  {
 	private ArrayList<Table> tablesWithin=new ArrayList<Table>();
 	private ArrayList<ForeignKey> versionForeignKeys= new ArrayList<ForeignKey>();
 	private DBVersionVisualRepresentation visualizationsOfDBVersion;
-	private IGraphMetrics graphMetricsOfDBVersion;
-	private GraphMetricsFactory gmFactory= new GraphMetricsFactory();
+	//private IGraphMetrics graphMetricsOfDBVersion;
+	//private GraphMetricsFactory gmFactory= new GraphMetricsFactory();
+	private Graph<String,String> versionGraph;
 
 	public DBVersion(ArrayList<Table> tablesWithin,ArrayList<ForeignKey> versionForeignKeys,String versionNameExtended){
 		
@@ -35,15 +38,19 @@ public class DBVersion  {
 		//3 set all the FK dependencies of the current version
 		 this.versionForeignKeys=versionForeignKeys;
 
-		 graphMetricsOfDBVersion = gmFactory.getGraphMetrics(tablesWithin,versionForeignKeys);
+		 //graphMetricsOfDBVersion = gmFactory.getDiachronicGraphMetrics(tablesWithin,versionForeignKeys);
 				 //new GraphMetrics(tablesWithin,versionForeignKeys);
 		 visualizationsOfDBVersion = new DBVersionVisualRepresentation(this,tablesWithin,versionForeignKeys,versionName); 
+		 
+		 this.versionGraph = new DirectedSparseGraph<String, String>();
 		
 	}
 	
-	public void visualizeEpisode(VisualizationViewer< String, String> visualizationViewer,DiachronicGraph diachronicGraph){
+	public void visualizeEpisode(VisualizationViewer< String, String> visualizationViewer,DiachronicGraph diachronicGraph, Graph<String,String> g){
 		
-		visualizationsOfDBVersion.createEpisodes(visualizationViewer,diachronicGraph.getDictionaryOfGraph(),diachronicGraph.getUniversalFrame(),diachronicGraph.getUniversalBounds(),diachronicGraph.getUniversalCenter(),diachronicGraph.getFrameX(),diachronicGraph.getFrameY(),diachronicGraph.getScaleX(),diachronicGraph.getScaleY());
+		visualizationsOfDBVersion.createEpisodes(visualizationViewer,diachronicGraph.getDictionaryOfGraph(),diachronicGraph.getUniversalFrame(),
+				diachronicGraph.getUniversalBounds(),diachronicGraph.getUniversalCenter(),diachronicGraph.getFrameX(),
+				diachronicGraph.getFrameY(),diachronicGraph.getScaleX(),diachronicGraph.getScaleY(), g);
 		
 	}
 
@@ -53,7 +60,7 @@ public class DBVersion  {
 		
 	}
 
-	public ArrayList<Table> getTables() {
+	public ArrayList<Table> getVersionTables() {
 		
 		return tablesWithin;
 	}
@@ -64,157 +71,168 @@ public class DBVersion  {
 		return versionForeignKeys;
 	}
 
-
-	public ArrayList<Table> getNodes() {
-		
-		return getTables();
-		
-	}
-
-
-	public ArrayList<ForeignKey> getEdges() {
-		
-		return getVersionForeignKeys();
-
-	}
+//
+//	public ArrayList<Table> getNodes() {
+//		
+//		return getTables();
+//		
+//	}
 
 
-	public String getVersion() {
+//	public ArrayList<ForeignKey> getEdges() {
+//		
+//		return getVersionForeignKeys();
+//
+//	}
+
+
+	public String getVersionName() {
 		
 		return this.versionName;
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public Graph getGraph(){
+	
+	public Graph<String,String> getVersionGraph(){
 		
-		return graphMetricsOfDBVersion.getGraph();
-		
+		return this.versionGraph;
 	}
 	
-	public String generateVertexDegree(String vertex){
+	public void setVersionGraph(Graph<String,String> g){
 		
-		vertex=vertex.replace(",","");
-		
-		
-		
-		for(int i=0;i<tablesWithin.size();++i){
-			if(vertex.equals(tablesWithin.get(i).getKey())){
-				vertex=vertex+",";
-				return graphMetricsOfDBVersion.generateVertexDegree(vertex);
-			}
-		}
-		
-		return "*,";
+		this.versionGraph = g;
 	}
 	
-	public String generateVertexInDegree(String vertex){
-		
-		vertex=vertex.replace(",","");
-		
-		
-		
-		for(int i=0;i<tablesWithin.size();++i){
-			if(vertex.equals(tablesWithin.get(i).getKey())){
-				vertex=vertex+",";
-				return graphMetricsOfDBVersion.generateVertexInDegree(vertex);
-			}
-		}
-		
-		return "*,";	
-	}
+//	@SuppressWarnings("rawtypes")
+//	public Graph getGraph(){
+//		
+//		return graphMetricsOfDBVersion.getGraph();
+//		
+//	}
 	
-	public String generateVertexOutDegree(String vertex){
-		
-		vertex=vertex.replace(",","");
-		
-		
-		
-		for(int i=0;i<tablesWithin.size();++i){
-			if(vertex.equals(tablesWithin.get(i).getKey())){
-				vertex=vertex+",";
-				return graphMetricsOfDBVersion.generateVertexOutDegree(vertex);
-			}
-		}
-		
-		return "*,";
-		
-	}
-	
-	public String generateVertexBetweenness(String vertex){
-		
-		vertex=vertex.replace(",","");
-		
-		
-		
-		for(int i=0;i<tablesWithin.size();++i){
-			if(vertex.equals(tablesWithin.get(i).getKey())){
-				vertex=vertex+",";
-				return graphMetricsOfDBVersion.generateVertexBetweenness(vertex);
-			}
-		}
-		
-		return "*,";	
-	}
-
-	public String generateEdgeBetweenness(String edge) {
-		
-		edge=edge.replace(",","");
-		
-		
-		
-		for(int i=0;i<versionForeignKeys.size();++i){
-			if(edge.equals(versionForeignKeys.get(i).getSourceTable()+"|"+versionForeignKeys.get(i).getTargetTable())){
-				edge=edge+",";
-				return graphMetricsOfDBVersion.generateEdgeBetweenness(edge);
-			}
-		}
-		
-		return "*,";	
-	}
-	
-	public String getGraphDiameter(){
-		
-		
-		return graphMetricsOfDBVersion.getGraphDiameter();
-		
-		
-	}
-	
-	public String getVertexCount(){
-		
-		return graphMetricsOfDBVersion.getVertexCount();
-		
-	}
-	
-	public String getVertexCountForGcc() {
-		
-		return graphMetricsOfDBVersion.getVertexCountForGcc();
-		
-	}
-	
-	public String getEdgeCount(){
-		
-		
-		return graphMetricsOfDBVersion.getEdgeCount();		
-		
-	}
-	
-	public String getEdgeCountForGCC(){
-		
-		return graphMetricsOfDBVersion.getEdgeCountForGcc();		
-		
-	}
-	
-	public String generateConnectedComponentsCountReport(){
-		
-		return graphMetricsOfDBVersion.getNumberOfConnectedComponents();
-		
-	}
-	
-	public Map<String,Double> getClusteringCoefficient(){
-		
-		return graphMetricsOfDBVersion.getClusteringCoefficient();
-		
-	}
+//	public String generateVertexDegree(String vertex){
+//		
+//		vertex=vertex.replace(",","");
+//		
+//		
+//		
+//		for(int i=0;i<tablesWithin.size();++i){
+//			if(vertex.equals(tablesWithin.get(i).getKey())){
+//				vertex=vertex+",";
+//				return graphMetricsOfDBVersion.generateVertexDegree(vertex);
+//			}
+//		}
+//		
+//		return "*,";
+//	}
+//	
+//	public String generateVertexInDegree(String vertex){
+//		
+//		vertex=vertex.replace(",","");
+//		
+//		
+//		
+//		for(int i=0;i<tablesWithin.size();++i){
+//			if(vertex.equals(tablesWithin.get(i).getKey())){
+//				vertex=vertex+",";
+//				return graphMetricsOfDBVersion.generateVertexInDegree(vertex);
+//			}
+//		}
+//		
+//		return "*,";	
+//	}
+//	
+//	public String generateVertexOutDegree(String vertex){
+//		
+//		vertex=vertex.replace(",","");
+//		
+//		
+//		
+//		for(int i=0;i<tablesWithin.size();++i){
+//			if(vertex.equals(tablesWithin.get(i).getKey())){
+//				vertex=vertex+",";
+//				return graphMetricsOfDBVersion.generateVertexOutDegree(vertex);
+//			}
+//		}
+//		
+//		return "*,";
+//		
+//	}
+//	
+//	public String generateVertexBetweenness(String vertex){
+//		
+//		vertex=vertex.replace(",","");
+//		
+//		
+//		
+//		for(int i=0;i<tablesWithin.size();++i){
+//			if(vertex.equals(tablesWithin.get(i).getKey())){
+//				vertex=vertex+",";
+//				return graphMetricsOfDBVersion.generateVertexBetweenness(vertex);
+//			}
+//		}
+//		
+//		return "*,";	
+//	}
+//
+//	public String generateEdgeBetweenness(String edge) {
+//		
+//		edge=edge.replace(",","");
+//		
+//		
+//		
+//		for(int i=0;i<versionForeignKeys.size();++i){
+//			if(edge.equals(versionForeignKeys.get(i).getSourceTable()+"|"+versionForeignKeys.get(i).getTargetTable())){
+//				edge=edge+",";
+//				return graphMetricsOfDBVersion.generateEdgeBetweenness(edge);
+//			}
+//		}
+//		
+//		return "*,";	
+//	}
+//	
+//	public String getGraphDiameter(){
+//		
+//		
+//		return graphMetricsOfDBVersion.getGraphDiameter();
+//		
+//		
+//	}
+//	
+//	public String getVertexCount(){
+//		
+//		return graphMetricsOfDBVersion.getVertexCount();
+//		
+//	}
+//	
+//	public String getVertexCountForGcc() {
+//		
+//		return graphMetricsOfDBVersion.getVertexCountForGcc();
+//		
+//	}
+//	
+//	public String getEdgeCount(){
+//		
+//		
+//		return graphMetricsOfDBVersion.getEdgeCount();		
+//		
+//	}
+//	
+//	public String getEdgeCountForGCC(){
+//		
+//		return graphMetricsOfDBVersion.getEdgeCountForGcc();		
+//		
+//	}
+//	
+//	public String generateConnectedComponentsCountReport(){
+//		
+//		return graphMetricsOfDBVersion.getNumberOfConnectedComponents();
+//		
+//	}
+//	
+//	public Map<String,Double> getClusteringCoefficient(){
+//		
+//		return graphMetricsOfDBVersion.getClusteringCoefficient();
+//		
+//	}
 	
 }

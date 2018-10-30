@@ -1,7 +1,10 @@
-package model;
+package model.metricsReport;
 
 import  parmenidianEnumerations.Metric_Enums;
 import java.util.EnumSet;
+
+import model.constructs.IDiachronicGraph;
+import model.graphMetrics.IGraphMetrics;
 
 public class ReportFactory {
 	
@@ -11,23 +14,30 @@ public class ReportFactory {
 	
 	
 	//Determines the implementation of populateArray of MetricsReportEngine object
-	public IMetricsReport getMetricsReportEngine(String targetFolder, Metric_Enums metric,IDiachronicGraph diachronicGraph){
+	public IMetricsReport getMetricsReportEngine(String targetFolder, Metric_Enums metric,IDiachronicGraph diachronicGraph,IGraphMetrics gMetrics){
 		
-		
+		try {
+
 			if (graphMetricsSet.contains(metric)){
-			
-				return new GraphMetricsReport(targetFolder, metric,diachronicGraph);
-					
+
+				return new GraphMetricsReport(targetFolder, metric,diachronicGraph,gMetrics);
+
 			}else if (vertexMetricsSet.contains(metric)){
-			
-				return new VertexMetricsReport(targetFolder, metric,diachronicGraph);			
-			
+
+				return new VertexMetricsReport(targetFolder, metric,diachronicGraph,gMetrics);			
+
 			}else{
-				
+				System.err.println("No metric provided.");
 				return null;
-			
+
 			}
-					
+
+
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	
 	}
 
